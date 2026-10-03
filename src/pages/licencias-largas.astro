@@ -1,0 +1,398 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+const planParam = (Astro.url.searchParams.get('plan') ?? '').toLowerCase();
+const fmt = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 });
+const DEFAULT_MONTHS = 12;
+const DEFAULT_FACTOR = 0.8;
+const plans = [
+  {
+    name: 'Básico',
+    key: 'basica',
+    tag: 'El más elegido',
+    monthly: 32500,
+    price: `$${fmt.format(Math.round(32500 * DEFAULT_MONTHS * DEFAULT_FACTOR))}`,
+    original: `$${fmt.format(32500 * DEFAULT_MONTHS)}`,
+    per: `por ${DEFAULT_MONTHS} meses`,
+    desc: 'Para comercios que arrancan y necesitan todas las funciones.',
+    features: [
+      { strong: 'Hasta 3 usuarios', text: ' trabajando en equipo' },
+      { strong: 'Hasta 1.000 productos', text: ' en catálogo' },
+      { text: 'Todos los módulos activados' },
+      { text: 'Soporte por email y WhatsApp' },
+    ],
+    cta: 'Contratar Básico',
+    featured: false,
+  },
+  {
+    name: 'Avanzado',
+    key: 'maxima',
+    tag: 'El más completo',
+    monthly: 39990,
+    price: `$${fmt.format(Math.round(39990 * DEFAULT_MONTHS * DEFAULT_FACTOR))}`,
+    original: `$${fmt.format(39990 * DEFAULT_MONTHS)}`,
+    per: `por ${DEFAULT_MONTHS} meses`,
+    desc: 'Todo el poder de Vendeto, sin límites de usuarios ni de productos.',
+    features: [
+      { strong: 'Usuarios ilimitados' },
+      { strong: 'Hasta 10.000 productos', text: ' en catálogo' },
+      { text: 'Verificación instantánea de pagos con Mercado Pago' },
+      { text: 'Soporte prioritario por email y WhatsApp' },
+    ],
+    cta: 'Contratar Avanzado',
+    featured: true,
+  },
+];
+const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
+---
+<BaseLayout
+  title="Licencias extendidas — Vendeto"
+  description="Comprá 6, 12 o 36 meses de Vendeto en un solo pago y ahorrá hasta 33%."
+>
+  <Header />
+  <main>
+    <section id="licencias" class="section renew">
+      <div class="container">
+        <div class="center">
+          <span class="eyebrow">Licencias extendidas</span>
+          <h1 class="section-title">Licencias extendidas</h1>
+          <p class="section-sub">
+            Comprá 6, 12 o 36 meses de una vez y ahorrá hasta 33%. Un solo pago, sin suscripciones mensuales.
+          </p>
+        </div>
+
+        <div class="billing-toggle-wrap">
+          <div class="billing-toggle" role="group" aria-label="Duración de la licencia">
+            <button type="button" class="billing-option" data-months="6">6 meses <span class="billing-save">-10%</span></button>
+            <button type="button" class="billing-option active" data-months="12">12 meses <span class="billing-save">-20%</span></button>
+            <button type="button" class="billing-option" data-months="36">36 meses <span class="billing-save">-33%</span></button>
+          </div>
+        </div>
+
+        <div class="plans">
+          {plans.map((p) => (
+            <article
+              class:list={['plan', { featured: p.featured, preselected: p.key === highlighted }]}
+              data-plan={p.key}
+              data-monthly={p.monthly}
+            >
+              <span class:list={['plan-tag', { 'plan-tag--featured': p.featured }]}>{p.tag}</span>
+              <h3 class="plan-name">{p.name}</h3>
+              <p class="plan-desc">{p.desc}</p>
+              <div class="plan-price">
+                <span class="amount">{p.price}</span>
+                <span class="per">{p.per}</span>
+              </div>
+              <div class="plan-save">
+                <span class="save-original">{p.original}</span>
+                <span class="save-badge">Ahorrás 20%</span>
+              </div>
+              <div class="plan-divider"></div>
+              <ul class="plan-features">
+                {p.features.map((f) => (
+                  <li>
+                    <svg class="check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12.5l4.5 4.5L19 7" />
+                    </svg>
+                    <span class="feature-text">{f.strong && <strong>{f.strong}</strong>}{f.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                class:list={['btn', p.featured ? 'btn-primary' : 'btn-ghost', 'plan-btn']}
+                data-plan={p.key}
+              >
+                {p.cta}
+              </button>
+            </article>
+          ))}
+        </div>
+
+        <p class="renew-note">
+          Tu licencia se activa al confirmar el pago y recibís tu clave por email.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay hidden" id="emailModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Completá tu email</h3>
+      <p>Recibirás tu clave de licencia en este correo después del pago.</p>
+      <input type="email" id="emailInput" placeholder="tu@email.com" autocomplete="email" required />
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="cancelBtn">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-sm" id="checkoutBtn">Ir a pagar</button>
+      </div>
+      <div class="loader hidden" id="loader">Procesando...</div>
+      <div class="error hidden" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  const WORKER_URL = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
+  const modal = document.getElementById('emailModal');
+  const input = document.getElementById('emailInput');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const loader = document.getElementById('loader');
+  const errorMsg = document.getElementById('errorMsg');
+  let selectedPlan = '';
+  const fmt = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 });
+  const DURATIONS = {
+    6: { factor: 0.9, save: 'Ahorrás 10%' },
+    12: { factor: 0.8, save: 'Ahorrás 20%' },
+    36: { factor: 0.67, save: 'Ahorrás 33%' },
+  };
+  let durationMonths = 12;
+
+  function openEmailModal(plan) {
+    selectedPlan = plan;
+    input.value = '';
+    errorMsg.classList.add('hidden');
+    loader.classList.add('hidden');
+    checkoutBtn.disabled = false;
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    input.focus();
+  }
+
+  function closeEmailModal() {
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.remove('hidden');
+  }
+
+  function hideError() {
+    errorMsg.classList.add('hidden');
+  }
+
+  async function startCheckout() {
+    const email = input.value.trim();
+    if (!email) { showError('Ingresá tu email'); return; }
+    if (!email.includes('@') || !email.includes('.')) { showError('Ingresá un email válido'); return; }
+
+    checkoutBtn.disabled = true;
+    loader.classList.remove('hidden');
+    hideError();
+
+    try {
+      const res = await fetch(`${WORKER_URL}/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: selectedPlan, email, duration_months: durationMonths }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error al crear el pago');
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        throw new Error('No se recibió URL de pago');
+      }
+    } catch (err) {
+      showError(err.message || 'Error de conexión');
+      checkoutBtn.disabled = false;
+      loader.classList.add('hidden');
+    }
+  }
+
+  function updatePrices() {
+    const { factor, save } = DURATIONS[durationMonths];
+    document.querySelectorAll('[data-monthly]').forEach((article) => {
+      const monthly = Number(article.dataset.monthly);
+      if (!monthly) return;
+      const amountEl = article.querySelector('.amount');
+      const perEl = article.querySelector('.per');
+      const originalEl = article.querySelector('.save-original');
+      const badgeEl = article.querySelector('.save-badge');
+      const original = monthly * durationMonths;
+      const total = Math.round(original * factor);
+      amountEl.textContent = `$${fmt.format(total)}`;
+      perEl.textContent = `por ${durationMonths} meses`;
+      originalEl.textContent = `$${fmt.format(original)}`;
+      badgeEl.textContent = save;
+    });
+  }
+
+  document.querySelectorAll('[data-plan]').forEach((btn) => {
+    btn.addEventListener('click', () => openEmailModal(btn.dataset.plan));
+  });
+  document.querySelectorAll('.billing-option').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      durationMonths = Number(btn.dataset.months);
+      document.querySelectorAll('.billing-option').forEach((b) => b.classList.toggle('active', b === btn));
+      updatePrices();
+    });
+  });
+  checkoutBtn.addEventListener('click', startCheckout);
+  cancelBtn.addEventListener('click', closeEmailModal);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') startCheckout();
+  });
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeEmailModal();
+  });
+</script>
+
+<style>
+  .renew { background: var(--ink-50); min-height: 70vh; }
+  .renew .center .section-sub { margin: 0 auto; }
+  .renew-note {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--ink-500);
+  }
+  .billing-toggle-wrap { margin-top: 32px; text-align: center; }
+  .billing-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--white);
+    border: 1px solid var(--ink-100);
+    border-radius: 999px;
+    padding: 5px;
+    box-shadow: var(--shadow);
+  }
+  .billing-option {
+    border: none;
+    background: transparent;
+    color: var(--ink-700);
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: inherit;
+    padding: 9px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .billing-option.active { background: var(--grad); color: var(--white); }
+  .billing-save {
+    background: var(--blue-600);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .billing-option.active .billing-save { background: var(--white); color: var(--blue-600); }
+  .plans {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: stretch;
+  }
+  .plan {
+    position: relative;
+    background: var(--white);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .plan:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .plan.featured { border: 2px solid var(--blue-600); box-shadow: var(--shadow-lg); }
+  .plan.preselected { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+  .plan-tag {
+    align-self: flex-start;
+    background: var(--ink-50);
+    color: var(--ink-700);
+    border: 1px solid var(--ink-100);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .plan-tag--featured { background: var(--grad); color: var(--white); border: none; }
+  .plan-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
+  .plan-desc { color: var(--ink-500); font-size: 0.92rem; margin-bottom: 20px; }
+  .plan-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; }
+  .amount { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; }
+  .plan.featured .amount { color: var(--blue-600); }
+  .per { color: var(--ink-500); font-size: 0.9rem; }
+  .plan-save {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .save-original { color: var(--ink-500); text-decoration: line-through; font-size: 0.95rem; }
+  .save-badge {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--blue-600);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .plan-divider { height: 1px; background: var(--ink-100); margin: 20px 0; }
+  .plan-features { list-style: none; margin-bottom: 28px; flex: 1; }
+  .plan-features li {
+    padding: 10px 0;
+    color: var(--ink-700);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .check { color: var(--blue-600); flex-shrink: 0; margin-top: 3px; }
+  .feature-text strong { color: var(--ink-900); font-weight: 700; }
+  .plan-btn { width: 100%; }
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--white);
+    padding: 32px;
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 400px;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+  .modal p { font-size: 0.9rem; color: var(--ink-500); margin-bottom: 16px; }
+  .modal input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--ink-100);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    margin-bottom: 16px;
+  }
+  .modal input:focus { outline: none; border-color: var(--blue-600); }
+  .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+  .btn-sm { padding: 10px 18px; font-size: 0.9rem; }
+  .loader { text-align: center; padding: 8px; color: var(--ink-500); font-size: 0.875rem; }
+  .error { text-align: center; padding: 8px; color: #dc2626; font-size: 0.875rem; }
+  @media (max-width: 720px) { .plans { grid-template-columns: 1fr; max-width: 420px; } }
+</style>
