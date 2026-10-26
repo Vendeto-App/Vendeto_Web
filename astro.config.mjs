@@ -2,5 +2,5 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://vendeto.vercel.app',
+  site: 'https://www.vendeto.com.ar',
 });
