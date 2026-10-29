@@ -1,86 +1,60 @@
 ---
-const features = [
+const groups = [
   {
-    icon: '💳',
-    title: 'Ventas rápidas',
-    desc: 'Cobrá en segundos con soporte para múltiples medios de pago: efectivo, débito, crédito, transferencia y QR.',
+    title: 'Cobrar',
+    items: [
+      { title: 'Ventas rápidas', description: 'Efectivo, débito, crédito, transferencia y QR.', icon: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h2"/>' },
+      { title: 'Productos por código de barras', description: 'Por unidad, kilo o litro, con categorías.', icon: '<path d="M3 5v14"/><path d="M8 5v14"/><path d="M12 5v14"/><path d="M17 5v14"/><path d="M21 5v14"/>' },
+      { title: 'Clientes y fiado', description: 'Cuentas corrientes con el saldo de cada cliente.', icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>' },
+    ],
   },
   {
-    icon: '📦',
-    title: 'Control de stock',
-    desc: 'Gestioná el inventario por producto y sucursal. El descuento de stock se valida siempre en el backend.',
+    title: 'Controlar',
+    items: [
+      { title: 'Stock al día', description: 'Se descuenta solo con cada venta, por producto y sucursal.', icon: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/>' },
+      { title: 'Caja y gastos', description: 'Apertura, cierre y gastos registrados.', icon: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>' },
+      { title: 'Compras a proveedores', description: 'Registrás cada compra y el stock se actualiza.', icon: '<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>' },
+    ],
   },
   {
-    icon: '🏷️',
-    title: 'Productos y categorías',
-    desc: 'Catálogo con código de barras, unidades de medida (unidad, kilo, litro) y categorías jerárquicas.',
-  },
-  {
-    icon: '👥',
-    title: 'Clientes y deudas',
-    desc: 'Registrá clientes con documento y llevá cuentas corrientes. Vendé a plazo y controlá los saldos.',
-  },
-  {
-    icon: '🛒',
-    title: 'Compras y proveedores',
-    desc: 'Registrá órdenes de compra y el detalle de cada una para mantener un stock siempre actualizado.',
-  },
-  {
-    icon: '💰',
-    title: 'Cajas y gastos',
-    desc: 'Abrí y cerrá caja, registrá gastos y controlá los montos recibidos con total transparencia.',
-  },
-  {
-    icon: '📊',
-    title: 'Reportes y estadísticas',
-    desc: 'Consultá métricas de ventas, productos más vendidos y márgenes en tiempo real para tomar mejores decisiones.',
-  },
-  {
-    icon: '🔒',
-    title: 'Roles y seguridad',
-    desc: 'Usuarios con permisos (admin, vendedores). Autenticación con JWT y contraseñas encriptadas.',
+    title: 'Crecer',
+    items: [
+      { title: 'Reportes', description: 'Lo más vendido y tus márgenes, al momento.', icon: '<path d="M13 17V9"/><path d="M18 17V5"/><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M8 17v-3"/>' },
+      { title: 'Usuarios con permisos', description: 'Dueño y vendedores, cada uno con su acceso.', icon: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>' },
+    ],
   },
 ];
 ---
 <section id="features" class="section">
   <div class="container">
-    <div class="center">
-      <h2 class="section-title">Todo lo que tu comercio necesita</h2>
-      <p class="section-sub">
-        Vendeto cubre el ciclo completo de un negocio minorista con módulos
-        integrados que trabajan en conjunto.
-      </p>
-    </div>
-
-    <div class="grid">
-      {features.map((f) => (
-        <article class="card">
-          <div class="card-icon">{f.icon}</div>
-          <h3 class="card-title">{f.title}</h3>
-          <p class="card-desc">{f.desc}</p>
-        </article>
+    <h2 class="section-title">Todo lo del mostrador, en un solo programa</h2>
+    <div class="groups">
+      {groups.map((group) => (
+        <div class="group">
+          <h3>{group.title}</h3>
+          <ul>
+            {group.items.map((item) => (
+              <li>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={item.icon} />
+                <div><strong>{item.title}</strong><p>{item.description}</p></div>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))}
     </div>
   </div>
 </section>
 
 <style>
-  .grid {
-    margin-top: 56px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .card {
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 28px;
-  }
-  .card-icon { font-size: 1.8rem; margin-bottom: 14px; }
-  .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-  .card-desc { color: var(--ink-2); font-size: 0.92rem; }
-
-  @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .section-title { max-width: 24ch; }
+  .groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 48px; }
+  .group { border-top: 1px solid var(--line); padding-top: 24px; }
+  .group h3 { font-size: 1.25rem; margin-bottom: 24px; }
+  .group ul { list-style: none; display: grid; gap: 24px; }
+  .group li { display: flex; align-items: flex-start; gap: 14px; }
+  .group svg { flex: none; color: var(--blue-ink); }
+  .group strong { display: block; color: var(--ink); }
+  .group p { color: var(--ink-2); font-size: 0.95rem; margin-top: 4px; }
+  @media (max-width: 720px) { .groups { grid-template-columns: 1fr; gap: 32px; } }
 </style>

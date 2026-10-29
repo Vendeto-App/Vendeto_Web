@@ -29,7 +29,7 @@ const links = [
     </div>
     <div class="nav-actions">
       <a href="/renovar" class="renew-link">Renovar licencia</a>
-      <a href="/api/latest?download=1" class="btn btn-primary nav-cta"><span>Descargar</span><span class="download-extra"> gratis</span></a>
+      <a href="/api/latest?download=1" class="btn btn-primary nav-cta"><span>Descargar</span> <span class="download-extra">gratis</span></a>
     </div>
   </nav>
 </header>
@@ -257,6 +257,9 @@ const links = [
   }
   @media (max-width: 899px) {
     .desktop-links, .renew-link { display: none; }
+  }
+  @media (min-width: 1100px) {
+    .desktop-links a, .renew-link { font-size: 0.9rem; }
   }
   @media (max-width: 400px) {
     .nav { width: calc(100% - 32px); gap: 8px; }

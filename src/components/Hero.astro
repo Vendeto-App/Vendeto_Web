@@ -37,14 +37,14 @@ const items = [
 </section>
 
 <style>
-  .hero { padding: 96px 0; }
+  .hero { padding: 96px 0; background: var(--paper); }
   .hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
   .hero-copy h1 { margin-bottom: 24px; }
   .hero-sub { max-width: 58ch; color: var(--ink-2); margin-bottom: 28px; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
   .hero-note { max-width: 60ch; color: var(--ink-2); font-size: 0.875rem; margin-top: 18px; }
   .receipt-wrap { display: flex; justify-content: center; min-width: 0; filter: drop-shadow(0 18px 22px rgba(4, 20, 51, 0.16)); }
-  .receipt { width: min(100%, 380px); background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 0.875rem; transform: rotate(-1.5deg); mask: conic-gradient(from 135deg at bottom, transparent 90deg, #000 0) 50% 100% / 16px 9px repeat-x, linear-gradient(#000 0 0) top / 100% calc(100% - 9px) no-repeat; animation: print 900ms ease-out both; }
+  .receipt { width: min(100%, 380px); background: var(--white); border: 1px solid var(--line); border-bottom: 0; color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 0.875rem; transform: rotate(-1.5deg); mask: conic-gradient(from 135deg at bottom, transparent 90deg, #000 0) 50% 100% / 16px 9px repeat-x, linear-gradient(#000 0 0) top / 100% calc(100% - 9px) no-repeat; animation: print 900ms ease-out both; }
   .receipt-inner { padding: 32px 26px 42px; }
   .receipt-heading { display: flex; flex-direction: column; text-align: center; gap: 4px; padding-bottom: 24px; border-bottom: 1px dashed var(--line); }
   .receipt-heading strong { font-size: 1.35rem; letter-spacing: 0.08em; }
@@ -58,6 +58,7 @@ const items = [
   @media (max-width: 899px) {
     .hero { padding: 64px 0; }
     .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+    .receipt-wrap { filter: drop-shadow(0 12px 24px rgba(4, 20, 51, 0.18)); }
     .receipt { width: min(100%, 420px); transform: none; }
   }
   @media (prefers-reduced-motion: reduce) {
