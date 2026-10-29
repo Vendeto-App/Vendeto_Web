@@ -1,4 +1,5 @@
 ---
+import CheckoutModal from './CheckoutModal.astro';
 const plans = [
   {
     name: 'Gratuito',
@@ -51,14 +52,13 @@ const plans = [
     featured: true,
   },
 ];
-const checkoutUrl = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
 ---
 <section id="precios" class="section pricing">
   <div class="container">
     <div class="center">
-      <h2 class="section-title">Precios simples y flexibles</h2>
+      <h2 class="section-title">Precios claros, sin letra chica</h2>
       <p class="section-sub">
-        Empezá gratis y escalá cuando tu comercio crezca. Sin costos ocultos.
+        Empezá gratis y pasate a un plan pago cuando lo necesites.
       </p>
     </div>
 
@@ -96,7 +96,7 @@ const checkoutUrl = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
           </ul>
           {p.key === 'gratuito' ? (
             <a href="/api/latest?download=1" class:list={['btn', 'btn-ghost', 'plan-btn']}>
-              {p.cta}
+              Descargar gratis
             </a>
           ) : (
             <button
@@ -119,103 +119,8 @@ const checkoutUrl = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
     </div>
   </div>
 
-  <div class="modal-overlay hidden" id="emailModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <h3 id="modalTitle">Completá tu email</h3>
-      <p>Recibirás tu clave de licencia en este correo después del pago.</p>
-      <input
-        type="email"
-        id="emailInput"
-        placeholder="tu@email.com"
-        autocomplete="email"
-        required
-      />
-      <div class="modal-actions">
-        <button type="button" class="btn btn-ghost btn-sm" id="cancelBtn">Cancelar</button>
-        <button type="button" class="btn btn-primary btn-sm" id="checkoutBtn">Ir a pagar</button>
-      </div>
-      <div class="loader hidden" id="loader">Procesando...</div>
-      <div class="error hidden" id="errorMsg"></div>
-    </div>
-  </div>
+  <CheckoutModal />
 </section>
-
-<script>
-  const WORKER_URL = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
-  const modal = document.getElementById('emailModal');
-  const input = document.getElementById('emailInput');
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
-  const loader = document.getElementById('loader');
-  const errorMsg = document.getElementById('errorMsg');
-  let selectedPlan = '';
-
-  function openEmailModal(plan) {
-    selectedPlan = plan;
-    input.value = '';
-    errorMsg.classList.add('hidden');
-    loader.classList.add('hidden');
-    checkoutBtn.disabled = false;
-    modal.classList.remove('hidden');
-    modal.setAttribute('aria-hidden', 'false');
-    input.focus();
-  }
-
-  function closeEmailModal() {
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden', 'true');
-  }
-
-  function showError(msg) {
-    errorMsg.textContent = msg;
-    errorMsg.classList.remove('hidden');
-  }
-
-  function hideError() {
-    errorMsg.classList.add('hidden');
-  }
-
-  async function startCheckout() {
-    const email = input.value.trim();
-    if (!email) { showError('Ingresá tu email'); return; }
-    if (!email.includes('@') || !email.includes('.')) { showError('Ingresá un email válido'); return; }
-
-    checkoutBtn.disabled = true;
-    loader.classList.remove('hidden');
-    hideError();
-
-    try {
-      const res = await fetch(`${WORKER_URL}/checkout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan, email }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al crear el pago');
-      if (data.checkout_url) {
-        window.location.href = data.checkout_url;
-      } else {
-        throw new Error('No se recibió URL de pago');
-      }
-    } catch (err) {
-      showError(err.message || 'Error de conexión');
-      checkoutBtn.disabled = false;
-      loader.classList.add('hidden');
-    }
-  }
-
-  document.querySelectorAll('[data-plan]').forEach((btn) => {
-    btn.addEventListener('click', () => openEmailModal(btn.dataset.plan));
-  });
-  checkoutBtn.addEventListener('click', startCheckout);
-  cancelBtn.addEventListener('click', closeEmailModal);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') startCheckout();
-  });
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeEmailModal();
-  });
-</script>
 
 <style>
   .pricing { background: var(--bg-alt); }
@@ -305,7 +210,8 @@ const checkoutUrl = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
   .plan-desc { color: var(--text-2); font-size: 0.92rem; margin-bottom: 20px; }
   .plan-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; }
   .amount { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; }
-  .plan.featured .amount { color: var(--link); }
+  .plan.featured .plan-price { align-self: flex-start; padding: 4px 12px; background: var(--tag); color: var(--on-tag); }
+  .plan.featured .per { color: var(--on-tag); }
   .per { color: var(--text-2); font-size: 0.9rem; }
   .plan-divider { height: 1px; background: var(--border); margin: 20px 0; }
   .plan-includes {
@@ -337,39 +243,5 @@ const checkoutUrl = 'https://posweb-licensing.chiacchio-eze01.workers.dev';
   }
   .feature-text strong { color: var(--text); font-weight: 700; }
   .plan-btn { width: 100%; }
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--overlay);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-  }
-  .modal-overlay.hidden { display: none; }
-  .modal {
-    background: var(--surface);
-    padding: 32px;
-    border-radius: 14px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 24px 50px var(--shadow-color);
-  }
-  .modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 0.9rem; color: var(--text-2); margin-bottom: 16px; }
-  .modal input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    margin-bottom: 16px;
-  }
-  .modal input:focus { border-color: var(--link); }
-  .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
-  .btn-sm { padding: 10px 18px; font-size: 0.9rem; }
-  .loader { text-align: center; padding: 8px; color: var(--text-2); font-size: 0.875rem; }
-  .error { text-align: center; padding: 8px; color: var(--danger); font-size: 0.875rem; }
   @media (max-width: 900px) { .plans { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; } }
 </style>

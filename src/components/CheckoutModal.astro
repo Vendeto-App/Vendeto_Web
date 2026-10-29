@@ -1,0 +1,127 @@
+---
+interface Props { description?: string; durationSelector?: string }
+const { description = 'Recibirás tu clave de licencia en este correo después del pago.', durationSelector } = Astro.props;
+---
+<div class="modal-overlay" id="emailModal" data-duration-selector={durationSelector} hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+    <h3 id="modalTitle">Completá tu email</h3>
+    <p id="modalDescription">{description}</p>
+    <label for="emailInput">Email</label>
+    <input type="email" id="emailInput" placeholder="tu@email.com" autocomplete="email" required />
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost btn-sm" id="cancelBtn">Cancelar</button>
+      <button type="button" class="btn btn-primary btn-sm" id="checkoutBtn">Ir a pagar</button>
+    </div>
+    <div class="loader" id="loader" role="status" hidden>Procesando...</div>
+    <div class="error" id="errorMsg" role="alert" hidden></div>
+  </div>
+</div>
+
+<script>
+  import { WORKER_URL } from '../config';
+
+  const modal = document.querySelector<HTMLDivElement>('#emailModal')!;
+  const input = document.querySelector<HTMLInputElement>('#emailInput')!;
+  const checkoutBtn = document.querySelector<HTMLButtonElement>('#checkoutBtn')!;
+  const cancelBtn = document.querySelector<HTMLButtonElement>('#cancelBtn')!;
+  const loader = document.querySelector<HTMLDivElement>('#loader')!;
+  const errorMsg = document.querySelector<HTMLDivElement>('#errorMsg')!;
+  let selectedPlan = '';
+  let opener: HTMLButtonElement | null = null;
+  let request: AbortController | null = null;
+
+  function open(button: HTMLButtonElement) {
+    opener = button;
+    selectedPlan = button.dataset.plan || '';
+    input.value = '';
+    errorMsg.hidden = true;
+    loader.hidden = true;
+    checkoutBtn.disabled = false;
+    modal.hidden = false;
+    input.focus();
+  }
+  function close() {
+    if (modal.hidden) return;
+    request?.abort();
+    request = null;
+    modal.hidden = true;
+    opener?.focus();
+  }
+  function showError(message: string) {
+    errorMsg.textContent = message;
+    errorMsg.hidden = false;
+  }
+  async function startCheckout() {
+    if (checkoutBtn.disabled) return;
+    input.value = input.value.trim();
+    if (!input.value) { showError('Ingresá tu email'); return; }
+    if (!input.checkValidity()) { showError('Ingresá un email válido'); return; }
+    checkoutBtn.disabled = true;
+    loader.hidden = false;
+    errorMsg.hidden = true;
+    const controller = new AbortController();
+    request = controller;
+    try {
+      const durationSelector = modal.dataset.durationSelector;
+      const durationMonths = durationSelector
+        ? Number(document.querySelector<HTMLButtonElement>(durationSelector)?.dataset.months)
+        : undefined;
+      if (durationSelector && ![6, 12, 36].includes(durationMonths!)) throw new Error('Seleccioná una duración válida');
+      const payload = durationSelector
+        ? { plan: selectedPlan, email: input.value, duration_months: durationMonths }
+        : { plan: selectedPlan, email: input.value };
+      const res = await fetch(`${WORKER_URL}/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error al crear el pago');
+      if (!data.checkout_url) throw new Error('No se recibió URL de pago');
+      window.location.href = data.checkout_url;
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      showError(error instanceof Error ? error.message : 'Error de conexión');
+      checkoutBtn.disabled = false;
+      loader.hidden = true;
+    } finally {
+      if (request === controller) request = null;
+    }
+  }
+  document.querySelectorAll<HTMLButtonElement>('button[data-plan]').forEach((button) => {
+    button.addEventListener('click', () => open(button));
+  });
+  checkoutBtn.addEventListener('click', startCheckout);
+  cancelBtn.addEventListener('click', close);
+  input.addEventListener('keydown', (event) => { if (event.key === 'Enter') startCheckout(); });
+  modal.addEventListener('click', (event) => { if (event.target === modal) close(); });
+  document.addEventListener('keydown', (event) => {
+    if (modal.hidden) return;
+    if (event.key === 'Escape') { event.preventDefault(); close(); return; }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(modal.querySelectorAll<HTMLElement>('input:not([disabled]), button:not([disabled])'));
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+      event.preventDefault(); first.focus();
+    }
+  });
+</script>
+
+<style>
+  .modal-overlay { position: fixed; inset: 0; background: var(--overlay); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal-overlay[hidden] { display: none; }
+  .modal { background: var(--surface); color: var(--text); padding: 32px; border-radius: 14px; width: 90%; max-width: 400px; box-shadow: 0 24px 50px var(--shadow-color); }
+  .modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
+  .modal p { font-size: 0.9rem; color: var(--text-2); margin-bottom: 16px; }
+  .modal label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+  .modal input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 0.95rem; font-family: inherit; margin-bottom: 16px; }
+  .modal input:focus { border-color: var(--link); }
+  .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+  .btn-sm { padding: 10px 18px; font-size: 0.9rem; }
+  .loader { text-align: center; padding: 8px; color: var(--text-2); font-size: 0.875rem; }
+  .error { text-align: center; padding: 8px; color: var(--danger); font-size: 0.875rem; }
+</style>
