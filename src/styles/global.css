@@ -24,6 +24,9 @@
   --tag: #FFD23F;
   --ok: #1E9E5A;
   --danger: #C62828;
+  --whatsapp: #25D366;
+  --whatsapp-hover: #1EBE5A;
+  --on-whatsapp: #FFFFFF;
 }
 
 :root[data-theme="dark"] {

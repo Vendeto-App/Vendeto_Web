@@ -1,0 +1,36 @@
+---
+const questions = [
+  { question: '¿Necesito internet para vender?', answer: 'No. Vendeto sigue registrando ventas sin conexión.' },
+  { question: '¿Qué pasa cuando termina la prueba de 7 días?', answer: 'Seguís usando Vendeto con el plan Gratuito, o elegís un plan pago.' },
+  { question: '¿Funciona en celular?', answer: 'Vendeto se instala en una computadora con Windows. Con los complementos usás el celular como lector de códigos o para consultar stock y precios.' },
+  { question: '¿Cómo recibo mi licencia?', answer: 'Te llega por email después del pago.' },
+  { question: '¿Puedo pagar una sola vez en lugar de todos los meses?', answer: 'Sí, con las licencias largas.' },
+  { question: '¿Qué medios de pago puedo cobrar en mi local?', answer: 'Efectivo, débito, crédito, transferencia y QR.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map(({ question, answer }) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })) };
+---
+<section id="preguntas" class="section faq">
+  <div class="container">
+    <h2 class="section-title">Preguntas frecuentes</h2>
+    <div class="questions">
+      {questions.map(({ question, answer }) => (
+        <details><summary>{question}<span aria-hidden="true" class="indicator"></span></summary><p>{answer}</p></details>
+      ))}
+    </div>
+  </div>
+</section>
+<!-- TODO(owner): add printer / ARCA invoicing FAQ once confirmed -->
+<script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+
+<style>
+  .faq { background: var(--bg-alt); }
+  .questions { margin-top: 40px; max-width: 800px; }
+  details { border-bottom: 1px solid var(--border); }
+  details:first-child { border-top: 1px solid var(--border); }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0; font-weight: 700; cursor: pointer; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  .indicator { flex: none; font-size: 1.5rem; line-height: 1; color: var(--link); }
+  .indicator::before { content: '+'; }
+  details[open] .indicator::before { content: '−'; }
+  details p { color: var(--text-2); padding-bottom: 20px; max-width: 65ch; }
+</style>

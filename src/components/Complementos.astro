@@ -1,13 +1,13 @@
 ---
 const addons = [
   {
-    icon: '📷',
+    icon: 'scan',
     name: 'Barcode Scanner',
     desc: 'Complemento de Vendeto que permite usar el celular como lector de códigos de barras.',
     url: 'https://drive.google.com/uc?export=download&id=14uXG1XVASh58nyyJ4O2YXnXX02ufwQL4',
   },
   {
-    icon: '🔍',
+    icon: 'search',
     name: 'Consulta Producto',
     desc: 'Complemento de Vendeto que permite consultar el stock, costo de venta y costo de compra desde el celular.',
     url: 'https://drive.google.com/uc?export=download&id=13z_AEyZw55spJuHBWIu0eCEIAXm9pUz7',
@@ -26,7 +26,13 @@ const addons = [
     <div class="addons">
       {addons.map((a) => (
         <article class="addon-card">
-          <div class="addon-icon">{a.icon}</div>
+          <div class="addon-icon">
+            {a.icon === 'scan' ? (
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" /><path d="M8 7v10" /><path d="M12 7v10" /><path d="M17 7v10" /></svg>
+            ) : (
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+            )}
+          </div>
           <h3 class="addon-name">{a.name}</h3>
           <p class="addon-desc">{a.desc}</p>
           <a href={a.url} class="btn btn-primary addon-btn" target="_blank" rel="noopener">
@@ -52,7 +58,7 @@ const addons = [
     padding: 32px;
     text-align: center;
   }
-  .addon-icon { font-size: 2.2rem; margin-bottom: 14px; }
+  .addon-icon { color: var(--link); margin-bottom: 14px; }
   .addon-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
   .addon-desc { color: var(--text-2); font-size: 0.95rem; margin-bottom: 24px; }
   .addon-btn { width: 100%; }

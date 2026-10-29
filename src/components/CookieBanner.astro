@@ -1,0 +1,51 @@
+<aside id="cookie-banner" class="cookie-banner" aria-label="Preferencias de cookies" hidden>
+  <p>Usamos cookies de Meta para medir y mejorar nuestros anuncios. Podés aceptarlas o rechazarlas.</p>
+  <div class="cookie-actions">
+    <button type="button" class="btn btn-ghost" data-cookie-choice="accept">Aceptar</button>
+    <button type="button" class="btn btn-ghost" data-cookie-choice="reject">Rechazar</button>
+  </div>
+</aside>
+
+<script is:inline>
+  (function () {
+    var banner = document.getElementById('cookie-banner');
+    if (!banner) return;
+    var key = 'vendeto-cookie-consent';
+    var loaded = false;
+    function loadPixel() {
+      if (loaded) return;
+      loaded = true;
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '2521342231676792');
+      fbq('track', 'PageView');
+    }
+    var choice;
+    try { choice = localStorage.getItem(key); } catch (_) { return; }
+    if (choice === 'accepted') loadPixel();
+    else if (choice !== 'rejected') banner.hidden = false;
+    banner.querySelectorAll('[data-cookie-choice]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var accepted = button.getAttribute('data-cookie-choice') === 'accept';
+        banner.hidden = true;
+        try { localStorage.setItem(key, accepted ? 'accepted' : 'rejected'); }
+        catch (_) {}
+        if (accepted) loadPixel();
+      });
+    });
+  })();
+</script>
+
+<style>
+  .cookie-banner { position: fixed; z-index: 110; inset: auto 16px 16px; display: flex; align-items: center; justify-content: space-between; gap: 24px; max-width: 1100px; margin: 0 auto; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; color: var(--text); box-shadow: 0 12px 32px var(--shadow-color); }
+  .cookie-banner[hidden] { display: none; }
+  .cookie-banner p { max-width: 65ch; font-size: 0.95rem; }
+  .cookie-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  @media (max-width: 720px) { .cookie-banner { align-items: stretch; flex-direction: column; gap: 12px; padding: 16px; } .cookie-actions .btn { flex: 1; } }
+</style>

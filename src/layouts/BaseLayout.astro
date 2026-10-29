@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
 import MobileInstaller from '../components/MobileInstaller.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
 interface Props {
   title?: string;
   description?: string;
@@ -54,28 +56,13 @@ const socialImage = new URL('/og-image.png', Astro.site);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <title>{title}</title>
-    <!-- Meta Pixel Code -->
-    <script is:inline>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '2521342231676792');
-      fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=2521342231676792&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
     <Analytics />
   </head>
   <body>
     <slot />
     <MobileInstaller />
+    <WhatsAppButton />
+    <CookieBanner />
     <script is:inline>
       (function () {
         var toggles = document.querySelectorAll('[data-theme-toggle]');
