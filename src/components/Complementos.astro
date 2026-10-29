@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import scanner from '../assets/photos/scanner.jpg';
 const addons = [
   {
     icon: 'scan',
@@ -23,6 +25,8 @@ const addons = [
       </p>
     </div>
 
+    <div class="addons-layout">
+      <Image src={scanner} width={560} height={500} alt="Lector de códigos de barras escaneando una caja" loading="lazy" decoding="async" class="scanner-photo" />
     <div class="addons">
       {addons.map((a) => (
         <article class="addon-card">
@@ -41,16 +45,18 @@ const addons = [
         </article>
       ))}
     </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .addons {
+  .addons-layout {
     margin-top: 56px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 32px;
   }
+  .scanner-photo { display: block; width: 100%; max-width: 373px; height: auto; border-radius: 14px; }
+  .addons { display: grid; gap: 24px; min-width: 0; }
   .addon-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -62,5 +68,5 @@ const addons = [
   .addon-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
   .addon-desc { color: var(--text-2); font-size: 0.95rem; margin-bottom: 24px; }
   .addon-btn { width: 100%; }
-  @media (max-width: 720px) { .addons { grid-template-columns: 1fr; } }
+  @media (min-width: 900px) { .addons-layout { grid-template-columns: minmax(0, 373px) minmax(0, 1fr); align-items: start; gap: 48px; } }
 </style>
