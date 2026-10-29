@@ -5,7 +5,6 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
 <section id="contacto" class="section">
   <div class="container contact-grid">
     <div class="contact-copy">
-      <span class="eyebrow">Contacto</span>
       <h2 class="section-title">¿Tenés una consulta?</h2>
       <p class="section-sub">
         Dejanos tu nombre, tu email y tu consulta. Te respondemos a la brevedad.
@@ -96,15 +95,14 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
   }
   .contact-links li { margin-bottom: 12px; }
   .contact-links a {
-    color: var(--blue-600);
+    color: var(--blue-ink);
     font-weight: 600;
   }
   .contact-links a:hover { text-decoration: underline; }
   .contact-form {
     background: var(--white);
-    border: 1px solid var(--ink-100);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    border-radius: 14px;
     padding: 32px;
   }
   .field { margin-bottom: 20px; }
@@ -112,33 +110,31 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
     display: block;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--ink-700);
+    color: var( --ink-2);
     margin-bottom: 8px;
   }
   .field input,
   .field textarea {
     width: 100%;
-    border: 1px solid var(--ink-100);
-    border-radius: 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
     padding: 12px 14px;
     font-size: 1rem;
     font-family: inherit;
-    color: var(--ink-900);
-    background: var(--ink-50);
+    color: var(--ink);
+    background: var(--paper);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .field input:focus,
   .field textarea:focus {
-    outline: none;
-    border-color: var(--blue-600);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: var(--blue);
     background: var(--white);
   }
   .field textarea { resize: vertical; }
   .contact-submit { width: 100%; }
   .contact-status { margin-top: 16px; font-size: 0.9rem; }
-  .contact-status-success { color: #16a34a; }
-  .contact-status-error { color: #dc2626; }
+  .contact-status-success { color: var(--ok); }
+  .contact-status-error { color: var(--danger); }
   @media (max-width: 860px) {
     .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   }

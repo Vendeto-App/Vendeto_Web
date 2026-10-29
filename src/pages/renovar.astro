@@ -48,7 +48,6 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
     <section id="renovar" class="section renew">
       <div class="container">
         <div class="center">
-          <span class="eyebrow">Renovación</span>
           <h1 class="section-title">Renová tu licencia</h1>
           <p class="section-sub">
             Tu plan se renueva por un mes más. Elegí el plan y pagá con Mercado Pago:
@@ -206,13 +205,13 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
 </script>
 
 <style>
-  .renew { background: var(--ink-50); min-height: 70vh; }
+  .renew { background: var(--paper); min-height: 70vh; }
   .renew .center .section-sub { margin: 0 auto; }
   .renew-note {
     margin-top: 28px;
     text-align: center;
     font-size: 0.85rem;
-    color: var(--ink-500);
+    color: var( --ink-2);
   }
   .one-time-banner {
     margin-top: 32px;
@@ -223,25 +222,23 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
     flex-wrap: wrap;
     text-align: center;
     background: var(--white);
-    border: 2px solid var(--blue-600);
-    border-radius: var(--radius);
+    border: 2px solid var(--blue);
+    border-radius: 14px;
     padding: 22px 28px;
-    box-shadow: var(--shadow);
     max-width: 760px;
     margin-left: auto;
     margin-right: auto;
   }
-  .one-time-text { font-size: 1.05rem; color: var(--ink-700); }
-  .one-time-text strong { font-weight: 800; color: var(--ink-900); }
+  .one-time-text { font-size: 1.05rem; color: var( --ink-2); }
+  .one-time-text strong { font-weight: 800; color: var(--ink); }
   .btn-one-time {
-    background: var(--grad);
+    background: var(--blue);
     color: var(--white);
     padding: 12px 24px;
-    border-radius: 12px;
+    border-radius: 6px;
     font-weight: 700;
-    box-shadow: var(--shadow);
   }
-  .btn-one-time:hover { opacity: 0.92; }
+  .btn-one-time:hover { background: var(--blue-ink); }
   .plans {
     margin-top: 40px;
     display: grid;
@@ -255,49 +252,45 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
   .plan {
     position: relative;
     background: var(--white);
-    border: 1px solid var(--ink-100);
-    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    border-radius: 14px;
     padding: 36px 32px;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .plan:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-  .plan.featured { border: 2px solid var(--blue-600); box-shadow: var(--shadow-lg); }
-  .plan.preselected { outline: 3px solid var(--blue-600); outline-offset: 2px; }
+  .plan.featured { border: 2px solid var(--blue); }
+  .plan.preselected { outline: 3px solid var(--blue); outline-offset: 2px; }
   .plan-tag {
     align-self: flex-start;
-    background: var(--ink-50);
-    color: var(--ink-700);
-    border: 1px solid var(--ink-100);
+    background: var(--paper);
+    color: var( --ink-2);
+    border: 1px solid var(--line);
     font-size: 0.72rem;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 5px 12px;
     border-radius: 999px;
     margin-bottom: 20px;
   }
-  .plan-tag--featured { background: var(--grad); color: var(--white); border: none; }
+  .plan-tag--featured { background: var(--blue-ink); color: var(--white); border: none; }
   .plan-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
-  .plan-desc { color: var(--ink-500); font-size: 0.92rem; margin-bottom: 20px; }
+  .plan-desc { color: var( --ink-2); font-size: 0.92rem; margin-bottom: 20px; }
   .plan-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; }
   .amount { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; }
-  .plan.featured .amount { color: var(--blue-600); }
-  .per { color: var(--ink-500); font-size: 0.9rem; }
-  .plan-divider { height: 1px; background: var(--ink-100); margin: 20px 0; }
+  .plan.featured .amount { color: var(--blue-ink); }
+  .per { color: var( --ink-2); font-size: 0.9rem; }
+  .plan-divider { height: 1px; background: var(--line); margin: 20px 0; }
   .plan-features { list-style: none; margin-bottom: 28px; flex: 1; }
   .plan-features li {
     padding: 10px 0;
-    color: var(--ink-700);
+    color: var( --ink-2);
     font-size: 0.95rem;
     display: flex;
     align-items: flex-start;
     gap: 10px;
   }
-  .check { color: var(--blue-600); flex-shrink: 0; margin-top: 3px; }
-  .feature-text strong { color: var(--ink-900); font-weight: 700; }
+  .check { color: var(--ok); flex-shrink: 0; margin-top: 3px; }
+  .feature-text strong { color: var(--ink); font-weight: 700; }
   .plan-btn { width: 100%; }
   .modal-overlay {
     position: fixed;
@@ -312,26 +305,26 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
   .modal {
     background: var(--white);
     padding: 32px;
-    border-radius: var(--radius);
+    border-radius: 14px;
     width: 90%;
     max-width: 400px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 24px 50px rgba(4, 20, 51, 0.18);
   }
   .modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 0.9rem; color: var(--ink-500); margin-bottom: 16px; }
+  .modal p { font-size: 0.9rem; color: var( --ink-2); margin-bottom: 16px; }
   .modal input {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid var(--ink-100);
-    border-radius: 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
     font-size: 0.95rem;
     font-family: inherit;
     margin-bottom: 16px;
   }
-  .modal input:focus { outline: none; border-color: var(--blue-600); }
+  .modal input:focus { border-color: var(--blue); }
   .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
   .btn-sm { padding: 10px 18px; font-size: 0.9rem; }
-  .loader { text-align: center; padding: 8px; color: var(--ink-500); font-size: 0.875rem; }
-  .error { text-align: center; padding: 8px; color: #dc2626; font-size: 0.875rem; }
+  .loader { text-align: center; padding: 8px; color: var( --ink-2); font-size: 0.875rem; }
+  .error { text-align: center; padding: 8px; color: var(--danger); font-size: 0.875rem; }
   @media (max-width: 720px) { .plans { grid-template-columns: 1fr; max-width: 420px; } }
 </style>

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import wordmark from '../assets/brand/wordmark-color.png';
 const links = [
   { href: '/#features', label: 'Funcionalidades' },
   { href: '/#precios', label: 'Precios' },
@@ -19,7 +21,7 @@ const links = [
         <span></span><span></span><span></span>
       </button>
       <a href="/#inicio" class="brand">
-        <img src="/images/logo.png" alt="Vendeto" class="brand-logo" />
+        <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo" />
       </a>
     </div>
     <a href="/api/latest?download=1" class="btn btn-primary nav-cta">Descargar</a>
@@ -30,7 +32,7 @@ const links = [
 <aside class="drawer" id="hamburger-drawer" aria-hidden="true">
   <div class="drawer-head">
     <a href="/#inicio" class="brand">
-      <img src="/images/logo.png" alt="Vendeto" class="brand-logo" />
+      <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo" />
     </a>
     <button type="button" class="drawer-close" aria-label="Cerrar menú">
       <span></span><span></span>
@@ -88,7 +90,7 @@ const links = [
     z-index: 50;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--ink-100);
+    border-bottom: 1px solid var(--line);
   }
   .nav {
     display: flex;
@@ -110,19 +112,19 @@ const links = [
     width: 40px;
     height: 40px;
     padding: 8px;
-    border: 1px solid var(--ink-100);
+    border: 1px solid var(--line);
     border-radius: 10px;
     background: #fff;
     cursor: pointer;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
-  .hamburger:hover { border-color: var(--ink-500); }
+  .hamburger:hover { border-color: var( --ink-2); }
   .hamburger span {
     display: block;
     height: 2px;
     width: 100%;
     border-radius: 2px;
-    background: var(--ink-700);
+    background: var( --ink-2);
   }
   .brand-logo {
     height: 40px;
@@ -152,7 +154,7 @@ const links = [
     height: 100%;
     padding: 20px;
     background: #fff;
-    border-right: 1px solid var(--ink-100);
+    border-right: 1px solid var(--line);
     box-shadow: 0 0 40px rgba(15, 23, 42, 0.15);
     overflow-y: auto;
     transform: translateX(-105%);
@@ -165,7 +167,7 @@ const links = [
     align-items: center;
     justify-content: space-between;
     padding-bottom: 20px;
-    border-bottom: 1px solid var(--ink-100);
+    border-bottom: 1px solid var(--line);
   }
   .drawer-close {
     position: relative;
@@ -173,11 +175,11 @@ const links = [
     height: 36px;
     border: none;
     border-radius: 10px;
-    background: var(--ink-50);
+    background: var(--paper);
     cursor: pointer;
     transition: background 0.2s ease;
   }
-  .drawer-close:hover { background: var(--ink-100); }
+  .drawer-close:hover { background: var(--line); }
   .drawer-close span {
     position: absolute;
     top: 50%;
@@ -185,7 +187,7 @@ const links = [
     width: 16px;
     height: 2px;
     border-radius: 2px;
-    background: var(--ink-700);
+    background: var( --ink-2);
   }
   .drawer-close span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
   .drawer-close span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
@@ -202,20 +204,20 @@ const links = [
     display: block;
     padding: 14px 12px;
     border-radius: 10px;
-    color: var(--ink-700);
+    color: var( --ink-2);
     font-weight: 500;
     font-size: 1.05rem;
     transition: background 0.2s ease, color 0.2s ease;
   }
   .drawer-links a:hover {
-    background: var(--ink-50);
-    color: var(--blue-600);
+    background: var(--paper);
+    color: var(--blue-ink);
   }
   .drawer-links .drawer-renovar,
   .drawer-links .drawer-licencias {
     display: block;
-    color: var(--blue-600);
-    border-top: 1px solid var(--ink-100);
+    color: var(--blue-ink);
+    border-top: 1px solid var(--line);
     border-radius: 10px;
     padding-top: 20px;
   }

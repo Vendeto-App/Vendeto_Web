@@ -17,7 +17,6 @@ const addons = [
 <section id="complementos" class="section">
   <div class="container">
     <div class="center">
-      <span class="eyebrow">Complementos</span>
       <h2 class="section-title">Extendé las capacidades de Vendeto</h2>
       <p class="section-sub">
         Descargá los programas complementarios para potenciar tu punto de venta.
@@ -48,17 +47,14 @@ const addons = [
   }
   .addon-card {
     background: var(--white);
-    border: 1px solid var(--ink-100);
-    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    border-radius: 14px;
     padding: 32px;
     text-align: center;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .addon-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
   .addon-icon { font-size: 2.2rem; margin-bottom: 14px; }
   .addon-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-  .addon-desc { color: var(--ink-500); font-size: 0.95rem; margin-bottom: 24px; }
+  .addon-desc { color: var( --ink-2); font-size: 0.95rem; margin-bottom: 24px; }
   .addon-btn { width: 100%; }
   @media (max-width: 720px) { .addons { grid-template-columns: 1fr; } }
 </style>

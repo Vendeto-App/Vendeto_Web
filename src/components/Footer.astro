@@ -1,10 +1,12 @@
 ---
+import { Image } from 'astro:assets';
+import wordmark from '../assets/brand/wordmark-white.png';
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
   <div class="container footer-grid">
     <div>
-      <img src="/images/logo.png" alt="Vendeto" class="footer-logo" />
+      <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="footer-logo" />
       <p class="footer-desc">
         Sistema de punto de venta (POS) para comercios minoristas.
         Ventas, stock, clientes, cajas y deudas en un solo lugar.
@@ -33,7 +35,7 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .footer { background: var(--ink-900); color: var(--ink-100); padding: 64px 0 0; }
+  .footer { background: var(--ink); color: var(--line); padding: 64px 0 0; }
   .footer-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
@@ -43,21 +45,18 @@ const year = new Date().getFullYear();
   .footer-logo {
     height: 40px;
     width: auto;
-    background: var(--white);
-    border-radius: 10px;
-    padding: 6px;
     margin-bottom: 16px;
   }
-  .footer-desc { color: var(--ink-500); font-size: 0.9rem; max-width: 300px; }
+  .footer-desc { color: var(--line); font-size: 0.9rem; max-width: 300px; }
   .footer h4 { color: var(--white); font-size: 0.95rem; margin-bottom: 16px; }
   .footer ul { list-style: none; }
   .footer li { margin-bottom: 10px; }
-  .footer li a { color: var(--ink-500); font-size: 0.9rem; }
+  .footer li a { color: var(--line); font-size: 0.9rem; }
   .footer li a:hover { color: var(--white); }
   .footer-bottom {
     border-top: 1px solid rgba(255,255,255,0.08);
     padding: 24px 0;
-    color: var(--ink-500);
+    color: var(--line);
     font-size: 0.85rem;
   }
   @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; } }

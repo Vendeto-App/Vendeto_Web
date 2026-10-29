@@ -45,7 +45,6 @@ const features = [
 <section id="features" class="section">
   <div class="container">
     <div class="center">
-      <span class="eyebrow">Funcionalidades</span>
       <h2 class="section-title">Todo lo que tu comercio necesita</h2>
       <p class="section-sub">
         Vendeto cubre el ciclo completo de un negocio minorista con módulos
@@ -74,16 +73,13 @@ const features = [
   }
   .card {
     background: var(--white);
-    border: 1px solid var(--ink-100);
-    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    border-radius: 14px;
     padding: 28px;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
   .card-icon { font-size: 1.8rem; margin-bottom: 14px; }
   .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-  .card-desc { color: var(--ink-500); font-size: 0.92rem; }
+  .card-desc { color: var( --ink-2); font-size: 0.92rem; }
 
   @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }

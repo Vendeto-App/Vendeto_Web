@@ -1,15 +1,6 @@
----
-const stats = [
-  { value: '19+', label: 'Módulos de gestión' },
-  { value: '100%', label: 'Stock controlado en backend' },
-  { value: 'Reportes', label: 'Estadísticas en tiempo real' },
-  { value: 'Offline-ready', label: 'Ventas sin conexión' },
-];
----
 <section id="inicio" class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
-      <span class="eyebrow">Punto de Venta · Gestión Integral</span>
       <h1 class="hero-title">
         Vendé más, <span class="accent">controlá todo</span> tu comercio
       </h1>
@@ -24,16 +15,8 @@ const stats = [
       </div>
     </div>
     <div class="hero-visual">
-      <img src="/images/logo-hero.png" alt="Vendeto" class="hero-shot" loading="eager" />
+      <img src="/images/logo-hero.png" alt="Vendeto" class="hero-shot" width="460" height="460" loading="eager" />
     </div>
-  </div>
-  <div class="container stats">
-    {stats.map((s) => (
-      <div class="stat">
-        <div class="stat-value">{s.value}</div>
-        <div class="stat-label">{s.label}</div>
-      </div>
-    ))}
   </div>
 </section>
 
@@ -46,19 +29,16 @@ const stats = [
     align-items: center;
   }
   .hero-title {
-    font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
     font-weight: 800;
     margin-bottom: 20px;
   }
   .accent {
-    background: var(--grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--ink);
   }
   .hero-sub {
     font-size: 1.15rem;
-    color: var(--ink-500);
+    color: var( --ink-2);
     margin-bottom: 32px;
   }
   .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -68,22 +48,7 @@ const stats = [
     max-width: 460px;
     height: auto;
   }
-  .stats {
-    margin-top: 80px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    padding-bottom: 96px;
-    border-bottom: 1px solid var(--ink-100);
-  }
-  .stat-value {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--blue-600);
-  }
-  .stat-label { color: var(--ink-500); font-size: 0.9rem; }
   @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-    .stats { grid-template-columns: repeat(2, 1fr); padding-bottom: 64px; }
   }
 </style>
