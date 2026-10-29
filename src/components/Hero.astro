@@ -1,54 +1,66 @@
+---
+const items = [
+  'Vende sin internet',
+  '+140.000 productos cargados',
+  'Stock, caja y fiados',
+  'Licencias largas, sin cuotas',
+];
+---
 <section id="inicio" class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
-      <h1 class="hero-title">
-        Vendé más, <span class="accent">controlá todo</span> tu comercio
-      </h1>
-      <p class="hero-sub">
-        Vendeto es un sistema de punto de venta (POS) pensado para comercios
-        minoristas. Ventas, stock, clientes, cajas y deudas en una sola plataforma,
-        rápida y fácil de usar.
-      </p>
+      <h1>Vendé, cobrá y controlá tu stock. Aunque se corte internet.</h1>
+      <p class="hero-sub">Vendeto es el sistema de punto de venta para kioscos, almacenes y comercios. Lo instalás en tu computadora y empezás gratis.</p>
       <div class="hero-actions">
-        <a href="/api/latest?download=1" class="btn btn-primary">Descargar Vendeto</a>
-        <a href="#features" class="btn btn-ghost">Conocer funcionalidades</a>
+        <a href="/api/latest?download=1" class="btn btn-primary">Descargar gratis</a>
+        <a href="#precios" class="btn btn-ghost">Ver precios</a>
       </div>
+      <p class="hero-note">Para Windows · 7 días del plan Avanzado gratis · Después seguís con el plan Gratuito</p>
     </div>
-    <div class="hero-visual">
-      <img src="/images/logo-hero.png" alt="Vendeto" class="hero-shot" width="460" height="460" loading="eager" />
+    <div class="receipt-wrap">
+      <figure class="receipt" aria-label="Resumen de lo que incluye Vendeto">
+        <div class="receipt-inner">
+          <div class="receipt-heading"><strong>VENDETO</strong><span>Ticket #0001</span></div>
+          <ul class="receipt-items">
+            {items.map((item, index) => (
+              <li class="receipt-row" style={`--row: ${index}`}>
+                <span>{item}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+              </li>
+            ))}
+          </ul>
+          <div class="receipt-total"><span>TOTAL PARA EMPEZAR</span><strong>$0,00</strong></div>
+        </div>
+      </figure>
     </div>
   </div>
 </section>
 
 <style>
-  .hero { padding-top: 72px; }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.1fr;
-    gap: 56px;
-    align-items: center;
+  .hero { padding: 96px 0; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .hero-copy h1 { margin-bottom: 24px; }
+  .hero-sub { max-width: 58ch; color: var(--ink-2); margin-bottom: 28px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-note { max-width: 60ch; color: var(--ink-2); font-size: 0.875rem; margin-top: 18px; }
+  .receipt-wrap { display: flex; justify-content: center; min-width: 0; filter: drop-shadow(0 18px 22px rgba(4, 20, 51, 0.16)); }
+  .receipt { width: min(100%, 380px); background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 0.875rem; transform: rotate(-1.5deg); mask: conic-gradient(from 135deg at bottom, transparent 90deg, #000 0) 50% 100% / 16px 9px repeat-x, linear-gradient(#000 0 0) top / 100% calc(100% - 9px) no-repeat; animation: print 900ms ease-out both; }
+  .receipt-inner { padding: 32px 26px 42px; }
+  .receipt-heading { display: flex; flex-direction: column; text-align: center; gap: 4px; padding-bottom: 24px; border-bottom: 1px dashed var(--line); }
+  .receipt-heading strong { font-size: 1.35rem; letter-spacing: 0.08em; }
+  .receipt-items { list-style: none; padding: 20px 0; border-bottom: 1px dashed var(--line); }
+  .receipt-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 7px 0; animation: row-appear 250ms ease-out both; animation-delay: calc(900ms + var(--row) * 90ms); }
+  .receipt-row svg { flex: none; color: var(--ok); }
+  .receipt-total { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 20px; padding: 14px 12px; background: var(--tag); color: var(--ink); font-size: 0.8rem; font-weight: 500; }
+  .receipt-total strong { white-space: nowrap; font-size: 1rem; }
+  @keyframes print { from { clip-path: inset(0 0 100%); } to { clip-path: inset(0); } }
+  @keyframes row-appear { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 899px) {
+    .hero { padding: 64px 0; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+    .receipt { width: min(100%, 420px); transform: none; }
   }
-  .hero-title {
-    font-size: clamp(2.4rem, 6vw, 4.2rem);
-    font-weight: 800;
-    margin-bottom: 20px;
-  }
-  .accent {
-    color: var(--ink);
-  }
-  .hero-sub {
-    font-size: 1.15rem;
-    color: var( --ink-2);
-    margin-bottom: 32px;
-  }
-  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
-  .hero-visual { position: relative; display: flex; justify-content: center; }
-  .hero-shot {
-    width: 100%;
-    max-width: 460px;
-    height: auto;
-  }
-  @media (max-width: 860px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  @media (prefers-reduced-motion: reduce) {
+    .receipt, .receipt-row { animation: none; }
   }
 </style>
