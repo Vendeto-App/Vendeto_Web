@@ -1,10 +1,8 @@
 ---
-import { Image } from 'astro:assets';
-import comerciante from '../assets/photos/comerciante.jpg';
 const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
 ---
 
-<section id="contacto" class="section">
+<section id="contacto" class="section contact">
   <div class="container contact-grid">
     <div class="contact-copy">
       <h2 class="section-title">¿Tenés una consulta?</h2>
@@ -16,7 +14,6 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
         <li><a href="mailto:soporte@vendeto.com.ar">soporte@vendeto.com.ar</a></li>
         <li><a href="tel:+5491138663629">+54 9 11 3866-3629</a></li>
       </ul>
-      <Image src={comerciante} width={470} height={760} alt="Comerciante atendiendo en su local" loading="lazy" decoding="async" class="contact-photo" />
     </div>
 
     <form class="contact-form" data-contact-form>
@@ -86,6 +83,7 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
 </script>
 
 <style>
+  .contact { background: var(--bg); }
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -103,8 +101,6 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
   }
   .contact-links a:hover { text-decoration: underline; }
   .contact-links .contact-whatsapp { display: inline-flex; padding: 12px 20px; border: 1px solid var(--link); border-radius: 6px; }
-  .contact-photo { display: block; width: 100%; max-width: 300px; height: auto; border-radius: 14px; margin-top: 32px; }
-  @media (max-width: 719px) { .contact-photo { display: none; } }
   .contact-form {
     background: var(--surface);
     border: 1px solid var(--border);
