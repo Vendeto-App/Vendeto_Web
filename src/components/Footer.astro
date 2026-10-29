@@ -35,7 +35,7 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .footer { background: var(--ink); color: var(--line); padding: 64px 0 0; }
+  .footer { background: var(--footer-bg); color: var(--footer-text); padding: 64px 0 0; }
   .footer-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
@@ -47,16 +47,16 @@ const year = new Date().getFullYear();
     width: auto;
     margin-bottom: 16px;
   }
-  .footer-desc { color: var(--line); font-size: 0.9rem; max-width: 300px; }
-  .footer h4 { color: var(--white); font-size: 0.95rem; margin-bottom: 16px; }
+  .footer-desc { color: var(--footer-text); font-size: 0.9rem; max-width: 300px; }
+  .footer h4 { color: var(--on-btn); font-size: 0.95rem; margin-bottom: 16px; }
   .footer ul { list-style: none; }
   .footer li { margin-bottom: 10px; }
-  .footer li a { color: var(--line); font-size: 0.9rem; }
-  .footer li a:hover { color: var(--white); }
+  .footer li a { color: var(--footer-text); font-size: 0.9rem; }
+  .footer li a:hover { color: var(--on-btn); }
   .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid var(--footer-text);
     padding: 24px 0;
-    color: var(--line);
+    color: var(--footer-text);
     font-size: 0.85rem;
   }
   @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; } }

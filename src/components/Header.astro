@@ -1,6 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import wordmark from '../assets/brand/wordmark-color.png';
+import whiteWordmark from '../assets/brand/wordmark-white.png';
+import ThemeToggle from './ThemeToggle.astro';
 const links = [
   { href: '/#features', label: 'Funcionalidades' },
   { href: '/#precios', label: 'Precios' },
@@ -21,7 +23,8 @@ const links = [
         <span></span><span></span><span></span>
       </button>
       <a href="/#inicio" class="brand">
-        <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo" />
+        <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo logo-light" />
+        <Image src={whiteWordmark} alt="Vendeto" width={whiteWordmark.width} height={whiteWordmark.height} class="brand-logo logo-dark" />
       </a>
     </div>
     <div class="desktop-links">
@@ -29,6 +32,7 @@ const links = [
     </div>
     <div class="nav-actions">
       <a href="/renovar" class="renew-link">Renovar licencia</a>
+      <div class="header-theme"><ThemeToggle /></div>
       <a href="/api/latest?download=1" class="btn btn-primary nav-cta"><span>Descargar</span> <span class="download-extra">gratis</span></a>
     </div>
   </nav>
@@ -38,7 +42,8 @@ const links = [
 <aside class="drawer" id="hamburger-drawer" aria-hidden="true" inert>
   <div class="drawer-head">
     <a href="/#inicio" class="brand">
-      <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo" />
+      <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo logo-light" />
+      <Image src={whiteWordmark} alt="Vendeto" width={whiteWordmark.width} height={whiteWordmark.height} class="brand-logo logo-dark" />
     </a>
     <button type="button" class="drawer-close" aria-label="Cerrar menú">
       <span></span><span></span>
@@ -51,6 +56,7 @@ const links = [
     <li><a href="/licencias-largas" class="drawer-licencias">Licencias largas</a></li>
     <li><a href="/renovar" class="drawer-renovar">Renovar licencia</a></li>
   </ul>
+  <div class="drawer-theme"><span>Modo oscuro</span><ThemeToggle /></div>
 </aside>
 
 <script is:inline>
@@ -111,8 +117,8 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--white);
-    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
   }
   .nav {
     display: flex;
@@ -126,9 +132,18 @@ const links = [
     align-items: center;
     gap: 14px;
   }
+  .brand-logo.logo-dark { display: none; }
+  :global([data-theme="dark"]) .logo-light { display: none; }
+  :global([data-theme="dark"]) .brand-logo.logo-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .logo-light { display: none; }
+    :global(:root:not([data-theme="light"])) .brand-logo.logo-dark { display: block; }
+  }
+  .drawer-theme { display: none; align-items: center; justify-content: space-between; margin-top: 20px; padding: 14px 12px; color: var(--text); }
+  @media (max-width: 599px) { .header-theme { display: none; } .drawer-theme { display: flex; } }
   .desktop-links, .nav-actions { display: flex; align-items: center; gap: 20px; }
-  .desktop-links a, .renew-link { color: var(--ink-2); font-size: 0.9rem; font-weight: 500; white-space: nowrap; }
-  .desktop-links a:hover, .renew-link:hover { color: var(--blue-ink); }
+  .desktop-links a, .renew-link { color: var(--text-2); font-size: 0.9rem; font-weight: 500; white-space: nowrap; }
+  .desktop-links a:hover, .renew-link:hover { color: var(--link); }
   .nav-cta { white-space: nowrap; }
   .hamburger {
     display: flex;
@@ -138,19 +153,19 @@ const links = [
     width: 40px;
     height: 40px;
     padding: 8px;
-    border: 1px solid var(--line);
+    border: 1px solid var(--border);
     border-radius: 10px;
-    background: #fff;
+    background: var(--surface);
     cursor: pointer;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
-  .hamburger:hover { border-color: var(--ink-2); }
+  .hamburger:hover { border-color: var(--text-2); }
   .hamburger span {
     display: block;
     height: 2px;
     width: 100%;
     border-radius: 2px;
-    background: var(--ink-2);
+    background: var(--text-2);
   }
   .brand-logo {
     height: 40px;
@@ -162,7 +177,7 @@ const links = [
     position: fixed;
     inset: 0;
     z-index: 90;
-    background: rgba(15, 23, 42, 0.45);
+    background: var(--overlay);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -179,9 +194,9 @@ const links = [
     width: min(320px, 85vw);
     height: 100%;
     padding: 20px;
-    background: #fff;
-    border-right: 1px solid var(--line);
-    box-shadow: 0 0 40px rgba(15, 23, 42, 0.15);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 0 40px var(--shadow-color);
     overflow-y: auto;
     transform: translateX(-105%);
     transition: transform 0.3s ease;
@@ -193,7 +208,7 @@ const links = [
     align-items: center;
     justify-content: space-between;
     padding-bottom: 20px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--border);
   }
   .drawer-close {
     position: relative;
@@ -201,11 +216,11 @@ const links = [
     height: 36px;
     border: none;
     border-radius: 10px;
-    background: var(--paper);
+    background: var(--bg-alt);
     cursor: pointer;
     transition: background 0.2s ease;
   }
-  .drawer-close:hover { background: var(--line); }
+  .drawer-close:hover { background: var(--border); }
   .drawer-close span {
     position: absolute;
     top: 50%;
@@ -213,7 +228,7 @@ const links = [
     width: 16px;
     height: 2px;
     border-radius: 2px;
-    background: var(--ink-2);
+    background: var(--text-2);
   }
   .drawer-close span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
   .drawer-close span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
@@ -230,20 +245,20 @@ const links = [
     display: block;
     padding: 14px 12px;
     border-radius: 10px;
-    color: var(--ink-2);
+    color: var(--text-2);
     font-weight: 500;
     font-size: 1.05rem;
     transition: background 0.2s ease, color 0.2s ease;
   }
   .drawer-links a:hover {
-    background: var(--paper);
-    color: var(--blue-ink);
+    background: var(--bg-alt);
+    color: var(--link);
   }
   .drawer-links .drawer-renovar,
   .drawer-links .drawer-licencias {
     display: block;
-    color: var(--blue-ink);
-    border-top: 1px solid var(--line);
+    color: var(--link);
+    border-top: 1px solid var(--border);
     border-radius: 10px;
     padding-top: 20px;
   }
@@ -260,6 +275,12 @@ const links = [
   }
   @media (min-width: 1100px) {
     .desktop-links a, .renew-link { font-size: 0.9rem; }
+  }
+  @media (min-width: 900px) and (max-width: 1099px) {
+    .nav { gap: 6px; }
+    .brand-logo { height: 24px; }
+    .desktop-links, .nav-actions { gap: 8px; }
+    .nav-cta { padding: 12px 10px; }
   }
   @media (max-width: 400px) {
     .nav { width: calc(100% - 32px); gap: 8px; }

@@ -205,13 +205,13 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
 </script>
 
 <style>
-  .renew { background: var(--paper); min-height: 70vh; }
+  .renew { background: var(--bg-alt); min-height: 70vh; }
   .renew .center .section-sub { margin: 0 auto; }
   .renew-note {
     margin-top: 28px;
     text-align: center;
     font-size: 0.85rem;
-    color: var(--ink-2);
+    color: var(--text-2);
   }
   .one-time-banner {
     margin-top: 32px;
@@ -221,24 +221,24 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
     gap: 20px;
     flex-wrap: wrap;
     text-align: center;
-    background: var(--white);
-    border: 2px solid var(--blue);
+    background: var(--surface);
+    border: 2px solid var(--link);
     border-radius: 14px;
     padding: 22px 28px;
     max-width: 760px;
     margin-left: auto;
     margin-right: auto;
   }
-  .one-time-text { font-size: 1.05rem; color: var(--ink-2); }
-  .one-time-text strong { font-weight: 800; color: var(--ink); }
+  .one-time-text { font-size: 1.05rem; color: var(--text-2); }
+  .one-time-text strong { font-weight: 800; color: var(--text); }
   .btn-one-time {
-    background: var(--blue);
-    color: var(--white);
+    background: var(--btn-bg);
+    color: var(--on-btn);
     padding: 12px 24px;
     border-radius: 6px;
     font-weight: 700;
   }
-  .btn-one-time:hover { background: var(--blue-ink); }
+  .btn-one-time:hover { background: var(--btn-bg-hover); }
   .plans {
     margin-top: 40px;
     display: grid;
@@ -251,20 +251,20 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
   }
   .plan {
     position: relative;
-    background: var(--white);
-    border: 1px solid var(--line);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 14px;
     padding: 36px 32px;
     display: flex;
     flex-direction: column;
   }
-  .plan.featured { border: 2px solid var(--blue); }
-  .plan.preselected { outline: 3px solid var(--blue); outline-offset: 2px; }
+  .plan.featured { border: 2px solid var(--link); }
+  .plan.preselected { outline: 3px solid var(--link); outline-offset: 2px; }
   .plan-tag {
     align-self: flex-start;
-    background: var(--paper);
-    color: var(--ink-2);
-    border: 1px solid var(--line);
+    background: var(--bg-alt);
+    color: var(--text-2);
+    border: 1px solid var(--border);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -272,30 +272,30 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
     border-radius: 999px;
     margin-bottom: 20px;
   }
-  .plan-tag--featured { background: var(--blue-ink); color: var(--white); border: none; }
+  .plan-tag--featured { background: var(--btn-bg); color: var(--on-btn); border: none; }
   .plan-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
-  .plan-desc { color: var(--ink-2); font-size: 0.92rem; margin-bottom: 20px; }
+  .plan-desc { color: var(--text-2); font-size: 0.92rem; margin-bottom: 20px; }
   .plan-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; }
   .amount { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; }
-  .plan.featured .amount { color: var(--blue-ink); }
-  .per { color: var(--ink-2); font-size: 0.9rem; }
-  .plan-divider { height: 1px; background: var(--line); margin: 20px 0; }
+  .plan.featured .amount { color: var(--link); }
+  .per { color: var(--text-2); font-size: 0.9rem; }
+  .plan-divider { height: 1px; background: var(--border); margin: 20px 0; }
   .plan-features { list-style: none; margin-bottom: 28px; flex: 1; }
   .plan-features li {
     padding: 10px 0;
-    color: var(--ink-2);
+    color: var(--text-2);
     font-size: 0.95rem;
     display: flex;
     align-items: flex-start;
     gap: 10px;
   }
   .check { color: var(--ok); flex-shrink: 0; margin-top: 3px; }
-  .feature-text strong { color: var(--ink); font-weight: 700; }
+  .feature-text strong { color: var(--text); font-weight: 700; }
   .plan-btn { width: 100%; }
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.5);
+    background: var(--overlay);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -303,28 +303,28 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
   }
   .modal-overlay.hidden { display: none; }
   .modal {
-    background: var(--white);
+    background: var(--surface);
     padding: 32px;
     border-radius: 14px;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 24px 50px rgba(4, 20, 51, 0.18);
+    box-shadow: 0 24px 50px var(--shadow-color);
   }
   .modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
-  .modal p { font-size: 0.9rem; color: var(--ink-2); margin-bottom: 16px; }
+  .modal p { font-size: 0.9rem; color: var(--text-2); margin-bottom: 16px; }
   .modal input {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid var(--line);
+    border: 1px solid var(--border);
     border-radius: 6px;
     font-size: 0.95rem;
     font-family: inherit;
     margin-bottom: 16px;
   }
-  .modal input:focus { border-color: var(--blue); }
+  .modal input:focus { border-color: var(--link); }
   .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
   .btn-sm { padding: 10px 18px; font-size: 0.9rem; }
-  .loader { text-align: center; padding: 8px; color: var(--ink-2); font-size: 0.875rem; }
+  .loader { text-align: center; padding: 8px; color: var(--text-2); font-size: 0.875rem; }
   .error { text-align: center; padding: 8px; color: var(--danger); font-size: 0.875rem; }
   @media (max-width: 720px) { .plans { grid-template-columns: 1fr; max-width: 420px; } }
 </style>

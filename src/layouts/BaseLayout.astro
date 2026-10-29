@@ -13,6 +13,22 @@ const socialImage = new URL('/og-image.png', Astro.site);
 <!doctype html>
 <html lang="es">
   <head>
+    <script is:inline>
+      (function () {
+        var stored;
+        try { stored = localStorage.getItem('vendeto-theme'); } catch (_) {}
+        var explicit = stored === 'light' || stored === 'dark';
+        var preference = window.matchMedia('(prefers-color-scheme: dark)');
+        document.documentElement.dataset.theme = explicit ? stored : (preference.matches ? 'dark' : 'light');
+        preference.addEventListener('change', function (event) {
+          if (!explicit) {
+            document.documentElement.dataset.theme = event.matches ? 'dark' : 'light';
+            window.dispatchEvent(new Event('vendeto-theme-sync'));
+          }
+        });
+        window.addEventListener('vendeto-theme-change', function () { explicit = true; });
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
@@ -28,7 +44,8 @@ const socialImage = new URL('/og-image.png', Astro.site);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
-    <meta name="theme-color" content="#041433" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#041433" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
@@ -59,6 +76,39 @@ const socialImage = new URL('/og-image.png', Astro.site);
   <body>
     <slot />
     <MobileInstaller />
+    <script is:inline>
+      (function () {
+        var toggles = document.querySelectorAll('[data-theme-toggle]');
+        function sync() {
+          var dark = document.documentElement.dataset.theme === 'dark';
+          toggles.forEach(function (toggle) { toggle.setAttribute('aria-checked', String(dark)); });
+        }
+        function setThemeColor(theme) {
+          var metas = document.querySelectorAll('meta[name="theme-color"]');
+          var meta = metas[0];
+          if (!meta) return;
+          meta.removeAttribute('media');
+          meta.content = theme === 'dark' ? '#041433' : '#FFFFFF';
+          for (var i = 1; i < metas.length; i++) metas[i].remove();
+        }
+        toggles.forEach(function (toggle) {
+          toggle.addEventListener('click', function () {
+            var theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = theme;
+            try { localStorage.setItem('vendeto-theme', theme); } catch (_) {}
+            window.dispatchEvent(new Event('vendeto-theme-change'));
+            setThemeColor(theme);
+            sync();
+          });
+        });
+        window.addEventListener('vendeto-theme-sync', sync);
+        try {
+          var stored = localStorage.getItem('vendeto-theme');
+          if (stored === 'light' || stored === 'dark') setThemeColor(stored);
+        } catch (_) {}
+        sync();
+      })();
+    </script>
     <script is:inline>
       document.addEventListener('click', function (e) {
         var el = e.target && e.target.closest ? e.target.closest('a[href*="download=1"]') : null;
