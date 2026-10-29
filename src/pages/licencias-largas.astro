@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CheckoutModal from '../components/CheckoutModal.astro';
+import MercadoPagoIcon from '../components/MercadoPagoIcon.astro';
 const planParam = (Astro.url.searchParams.get('plan') ?? '').toLowerCase();
 const fmt = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 });
 const DEFAULT_MONTHS = 12;
@@ -95,7 +96,7 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
                     <svg class="check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <path d="M5 12.5l4.5 4.5L19 7" />
                     </svg>
-                    <span class="feature-text">{f.strong && <strong>{f.strong}</strong>}{f.text}</span>
+                    <span class="feature-text">{f.strong && <strong>{f.strong}</strong>}{f.text}{f.text === 'Verificación instantánea de pagos con Mercado Pago' && <> <MercadoPagoIcon /></>}</span>
                   </li>
                 ))}
               </ul>

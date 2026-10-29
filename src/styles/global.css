@@ -27,6 +27,7 @@
   --whatsapp: #25D366;
   --whatsapp-hover: #1EBE5A;
   --on-whatsapp: #FFFFFF;
+  --mercadopago: #00B1EA;
 }
 
 :root[data-theme="dark"] {
