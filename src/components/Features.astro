@@ -1,5 +1,5 @@
 ---
-const groups = [
+const rawGroups = [
   {
     title: 'Cobrar',
     items: [
@@ -24,8 +24,14 @@ const groups = [
     ],
   },
 ];
+let offset = 0;
+const groups = rawGroups.map((group) => {
+  const start = offset;
+  offset += group.items.length;
+  return { ...group, start };
+});
 ---
-<section id="features" class="section features">
+<section id="features" class="section features" data-reveal>
   <div class="container">
     <h2 class="section-title">Todo lo del mostrador, en un solo programa</h2>
     <div class="groups">
@@ -33,9 +39,9 @@ const groups = [
         <div class="group">
           <h3>{group.title}</h3>
           <ul>
-            {group.items.map((item) => (
+            {group.items.map((item, index) => (
               <li>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={item.icon} />
+                <svg style={`--i:${group.start + index}`} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={item.icon} />
                 <div><strong>{item.title}</strong><p>{item.description}</p></div>
               </li>
             ))}

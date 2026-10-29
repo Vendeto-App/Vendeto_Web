@@ -8,7 +8,7 @@ const reasons = [
   { title: 'Licencias largas', description: 'Pagás por un período largo y te olvidás de las cuotas mensuales.', href: '/licencias-largas' },
 ];
 ---
-<section id="por-que" class="section why">
+<section id="por-que" class="section why" data-reveal>
   <div class="container">
     <h2 class="section-title">Pensado para el mostrador argentino</h2>
     <div class="why-intro">
@@ -16,8 +16,8 @@ const reasons = [
       <Image src={abierto} width={640} height={340} alt="Cartel de ABIERTO en la puerta de un comercio de barrio" loading="lazy" decoding="async" class="why-photo" />
     </div>
     <div class="reasons">
-      {reasons.map((reason) => (
-        <article class="reason">
+      {reasons.map((reason, index) => (
+        <article class="reason" style={`--i:${index}`}>
           <h3>{reason.title}</h3>
           <p>{reason.description}</p>
           {reason.href && <a href={reason.href}>Ver licencias largas</a>}

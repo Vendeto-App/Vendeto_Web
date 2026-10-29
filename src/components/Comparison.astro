@@ -8,7 +8,7 @@ const rows = [
   { label: 'Lo más vendido', notebook: 'No sabés', vendeto: 'Reporte listo' },
 ];
 ---
-<section class="section comparison">
+<section class="section comparison" data-reveal>
   <div class="container">
     <h2 class="section-title">Cuaderno o Vendeto</h2>
     <div class="comparison-content">
@@ -18,10 +18,10 @@ const rows = [
           <caption>Comparación de cuaderno o Excel con Vendeto</caption>
           <thead><tr><th scope="col"><span class="sr-only">Tarea</span></th><th scope="col">Cuaderno / Excel</th><th scope="col" class="vendeto">Vendeto</th></tr></thead>
           <tbody>
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <tr>
                 <th scope="row">{row.label}</th><td data-label="Cuaderno / Excel">{row.notebook}</td>
-                <td class="vendeto" data-label="Vendeto"><span class="result"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>{row.vendeto}</span></td>
+                <td class="vendeto" data-label="Vendeto"><span class="result"><svg style={`--i:${index}`} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>{row.vendeto}</span></td>
               </tr>
             ))}
           </tbody>

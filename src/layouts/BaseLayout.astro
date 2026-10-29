@@ -17,6 +17,7 @@ const socialImage = new URL('/og-image.png', Astro.site);
   <head>
     <script is:inline>
       (function () {
+        try { history.scrollRestoration = 'manual'; } catch (_) {}
         var stored;
         try { stored = localStorage.getItem('vendeto-theme'); } catch (_) {}
         var explicit = stored === 'light' || stored === 'dark';
@@ -29,6 +30,13 @@ const socialImage = new URL('/og-image.png', Astro.site);
           }
         });
         window.addEventListener('vendeto-theme-change', function () { explicit = true; });
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if ('IntersectionObserver' in window && !reduce.matches) {
+          document.documentElement.classList.add('motion');
+          setTimeout(function () {
+            if (!window.__vendetoReveal) document.documentElement.classList.add('reveal-all');
+          }, 2500);
+        }
       })();
     </script>
     <meta charset="UTF-8" />
