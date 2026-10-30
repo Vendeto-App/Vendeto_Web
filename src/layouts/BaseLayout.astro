@@ -18,6 +18,12 @@ const socialImage = new URL('/og-image.png', Astro.site);
     <script is:inline>
       (function () {
         try { history.scrollRestoration = 'manual'; } catch (_) {}
+        try {
+          var nav = performance.getEntriesByType('navigation')[0];
+          if (nav && nav.type === 'reload' && location.hash) {
+            history.replaceState(null, '', location.pathname + location.search);
+          }
+        } catch (_) {}
         var stored;
         try { stored = localStorage.getItem('vendeto-theme'); } catch (_) {}
         var explicit = stored === 'light' || stored === 'dark';
@@ -102,6 +108,31 @@ const socialImage = new URL('/og-image.png', Astro.site);
           if (stored === 'light' || stored === 'dark') setThemeColor(stored);
         } catch (_) {}
         sync();
+      })();
+    </script>
+    <script is:inline>
+      (function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        document.addEventListener('click', function (e) {
+          if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          if (!link) return;
+          var url = new URL(link.getAttribute('href'), location.href);
+          if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash) return;
+          var id = decodeURIComponent(url.hash.slice(1));
+          var target = id === 'inicio' ? document.body : document.getElementById(id);
+          if (!target) return;
+          e.preventDefault();
+          var behavior = reduce.matches ? 'auto' : 'smooth';
+          if (id === 'inicio') window.scrollTo({ top: 0, behavior: behavior });
+          else target.scrollIntoView({ behavior: behavior, block: 'start' });
+          history.replaceState(null, '', location.pathname + location.search);
+          setTimeout(function () {
+            if (target === document.body) return;
+            if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+            target.focus({ preventScroll: true });
+          }, 0);
+        });
       })();
     </script>
     <script is:inline>
