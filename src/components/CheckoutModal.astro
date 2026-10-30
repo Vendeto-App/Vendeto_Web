@@ -1,13 +1,36 @@
----
-interface Props { description?: string; durationSelector?: string }
-const { description = 'Recibirás tu clave de licencia en este correo después del pago.', durationSelector } = Astro.props;
+﻿---
+interface Props { description?: string; durationSelector?: string; billingChoice?: boolean }
+const {
+  description = 'Recibirás tu clave de licencia en este correo después del pago.',
+  durationSelector,
+  billingChoice = false,
+} = Astro.props;
 ---
 <div class="modal-overlay" id="emailModal" data-duration-selector={durationSelector} hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
     <h3 id="modalTitle">Completá tu email</h3>
     <p id="modalDescription">{description}</p>
+    {billingChoice && (
+      <div class="billing" role="radiogroup" aria-label="Forma de pago">
+        <label class="billing-option">
+          <input type="radio" name="billing" value="subscription" checked />
+          <span class="billing-text">
+            <span class="billing-title">Débito automático mensual <span class="billing-badge">Recomendado</span></span>
+            <span class="billing-desc">Se cobra <span data-billing-price></span> por mes con tu tarjeta. Lo cancelás cuando quieras desde Mercado Pago.</span>
+          </span>
+        </label>
+        <label class="billing-option">
+          <input type="radio" name="billing" value="one-time" />
+          <span class="billing-text">
+            <span class="billing-title">Pago único de 1 mes</span>
+            <span class="billing-desc">Pagás con cualquier medio de Mercado Pago y renovás a mano.</span>
+          </span>
+        </label>
+      </div>
+    )}
     <label for="emailInput">Email</label>
     <input type="email" id="emailInput" placeholder="tu@email.com" autocomplete="email" required />
+    {billingChoice && <p class="billing-hint" data-billing-hint>Usá el email de tu cuenta de Mercado Pago.</p>}
     <div class="modal-actions">
       <button type="button" class="btn btn-ghost btn-sm" id="cancelBtn">Cancelar</button>
       <button type="button" class="btn btn-primary btn-sm" id="checkoutBtn">Ir a pagar</button>
@@ -26,9 +49,20 @@ const { description = 'Recibirás tu clave de licencia en este correo después d
   const cancelBtn = document.querySelector<HTMLButtonElement>('#cancelBtn')!;
   const loader = document.querySelector<HTMLDivElement>('#loader')!;
   const errorMsg = document.querySelector<HTMLDivElement>('#errorMsg')!;
+  const billingInputs = Array.from(modal.querySelectorAll<HTMLInputElement>('input[name="billing"]'));
+  const billingHint = modal.querySelector<HTMLParagraphElement>('[data-billing-hint]');
+  const billingPrice = modal.querySelector<HTMLElement>('[data-billing-price]');
   let selectedPlan = '';
   let opener: HTMLButtonElement | null = null;
   let request: AbortController | null = null;
+
+  function billingMode() {
+    const checked = billingInputs.find((radio) => radio.checked);
+    return checked ? checked.value : '';
+  }
+  function syncBilling() {
+    if (billingHint) billingHint.hidden = billingMode() !== 'subscription';
+  }
 
   function open(button: HTMLButtonElement) {
     opener = button;
@@ -37,6 +71,9 @@ const { description = 'Recibirás tu clave de licencia en este correo después d
     errorMsg.hidden = true;
     loader.hidden = true;
     checkoutBtn.disabled = false;
+    if (billingPrice) billingPrice.textContent = button.dataset.price || '';
+    billingInputs.forEach((radio) => { radio.checked = radio.value === 'subscription'; });
+    syncBilling();
     modal.hidden = false;
     input.focus();
   }
@@ -67,9 +104,10 @@ const { description = 'Recibirás tu clave de licencia en este correo después d
         ? Number(document.querySelector<HTMLButtonElement>(durationSelector)?.dataset.months)
         : undefined;
       if (durationSelector && ![6, 12, 36].includes(durationMonths!)) throw new Error('Seleccioná una duración válida');
-      const payload = durationSelector
+      const payload: { plan: string; email: string; duration_months?: number; billing?: string } = durationSelector
         ? { plan: selectedPlan, email: input.value, duration_months: durationMonths }
         : { plan: selectedPlan, email: input.value };
+      if (!durationSelector && billingMode() === 'subscription') payload.billing = 'subscription';
       const res = await fetch(`${WORKER_URL}/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -94,6 +132,7 @@ const { description = 'Recibirás tu clave de licencia en este correo después d
   });
   checkoutBtn.addEventListener('click', startCheckout);
   cancelBtn.addEventListener('click', close);
+  billingInputs.forEach((radio) => radio.addEventListener('change', syncBilling));
   input.addEventListener('keydown', (event) => { if (event.key === 'Enter') startCheckout(); });
   modal.addEventListener('click', (event) => { if (event.target === modal) close(); });
   document.addEventListener('keydown', (event) => {
@@ -121,6 +160,36 @@ const { description = 'Recibirás tu clave de licencia en este correo después d
   .modal input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 0.95rem; font-family: inherit; margin-bottom: 16px; }
   .modal input:focus { border-color: var(--link); }
   .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+  .billing { display: grid; gap: 8px; margin-bottom: 16px; }
+  .modal .billing-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .modal .billing-option:has(input:checked) { border-color: var(--link); background: var(--accent-tint); }
+  .modal .billing-option input { flex: none; width: auto; margin: 3px 0 0; padding: 0; border: 0; background: none; accent-color: var(--link); }
+  .billing-text { display: grid; gap: 2px; }
+  .billing-title { font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .billing-desc { font-size: 0.82rem; color: var(--text-2); }
+  .billing-badge {
+    background: var(--btn-bg);
+    color: var(--on-btn);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+  .modal .billing-hint { font-size: 0.85rem; color: var(--text-2); margin-top: -8px; margin-bottom: 16px; }
+  .modal .billing-hint[hidden] { display: none; }
   .btn-sm { padding: 10px 18px; font-size: 0.9rem; }
   .loader { text-align: center; padding: 8px; color: var(--text-2); font-size: 0.875rem; }
   .error { text-align: center; padding: 8px; color: var(--danger); font-size: 0.875rem; }
