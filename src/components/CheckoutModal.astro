@@ -7,7 +7,7 @@ const {
 } = Astro.props;
 ---
 <div class="modal-overlay" id="emailModal" data-duration-selector={durationSelector} hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+  <div class="modal" role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
     <h3 id="modalTitle">Completá tu email</h3>
     <p id="modalDescription">{description}</p>
     {billingChoice && (
@@ -44,6 +44,7 @@ const {
   import { WORKER_URL } from '../config';
 
   const modal = document.querySelector<HTMLDivElement>('#emailModal')!;
+  const dialog = modal.querySelector<HTMLDivElement>('.modal')!;
   const input = document.querySelector<HTMLInputElement>('#emailInput')!;
   const checkoutBtn = document.querySelector<HTMLButtonElement>('#checkoutBtn')!;
   const cancelBtn = document.querySelector<HTMLButtonElement>('#cancelBtn')!;
@@ -75,7 +76,8 @@ const {
     billingInputs.forEach((radio) => { radio.checked = radio.value === 'subscription'; });
     syncBilling();
     modal.hidden = false;
-    input.focus();
+    if (billingInputs.length) dialog.focus();
+    else input.focus();
   }
   function close() {
     if (modal.hidden) return;
@@ -154,6 +156,7 @@ const {
   .modal-overlay { position: fixed; inset: 0; background: var(--overlay); display: flex; align-items: center; justify-content: center; z-index: 100; }
   .modal-overlay[hidden] { display: none; }
   .modal { background: var(--surface); color: var(--text); padding: 32px; border-radius: 14px; width: 90%; max-width: 400px; box-shadow: 0 24px 50px var(--shadow-color); }
+  .modal:focus { outline: none; }
   .modal h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; }
   .modal p { font-size: 0.9rem; color: var(--text-2); margin-bottom: 16px; }
   .modal label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
