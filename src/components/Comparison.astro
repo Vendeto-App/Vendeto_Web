@@ -34,7 +34,7 @@ const rows = [
 <style>
   .comparison { background: var(--bg); }
   .comparison-content { display: grid; gap: 32px; margin-top: 40px; min-width: 0; }
-  .comparison-photo { width: 100%; max-width: 280px; height: auto; border-radius: 14px; }
+  .comparison-photo { display: block; width: 100%; height: auto; border-radius: 14px; object-fit: cover; }
   .table-wrap { min-width: 0; }
   table { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; }
   caption, .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
@@ -54,9 +54,12 @@ const rows = [
     .result { gap: 6px; align-items: flex-start; }
     .result svg { width: 16px; height: 16px; margin-top: 2px; }
   }
+  @media (max-width: 899px) {
+    .comparison-photo { aspect-ratio: 16 / 10; }
+  }
   @media (min-width: 900px) {
-    .comparison-content { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; }
-    .comparison-photo { grid-column: 2; grid-row: 1; max-width: 312px; }
+    .comparison-content { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: stretch; }
+    .comparison-photo { grid-column: 2; grid-row: 1; height: 100%; max-width: none; }
     .table-wrap { grid-column: 1; grid-row: 1; }
   }
 </style>

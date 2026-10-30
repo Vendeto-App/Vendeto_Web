@@ -8,12 +8,17 @@
     if (!bar || !hero || !contact || !('IntersectionObserver' in window)) return;
 
     var heroVisible = true;
-    var contactVisible = false;
     var showState = false;
     var hideTimer;
+    var ticking = false;
+
+    function contactReached() {
+      return contact.getBoundingClientRect().top <= window.innerHeight;
+    }
 
     function sync() {
-      var show = !heroVisible && !contactVisible;
+      var show = !heroVisible && !contactReached();
+      if (show === showState) return;
       showState = show;
       clearTimeout(hideTimer);
       if (show) {
@@ -34,10 +39,17 @@
       sync();
     }).observe(hero);
 
-    new IntersectionObserver(function (entries) {
-      contactVisible = entries[0].isIntersecting;
-      sync();
-    }).observe(contact);
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        sync();
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
   })();
 </script>
 
