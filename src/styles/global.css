@@ -52,8 +52,8 @@
   --footer-bg: #020B1F;
   --shadow-color: rgba(0, 0, 0, 0.55);
   --overlay: rgba(0, 0, 0, 0.65);
-  --section-tint: rgba(4, 20, 51, 0.90);
-  --section-tint-alt: rgba(7, 27, 66, 0.92);
+  --section-tint: rgba(4, 20, 51, 0.82);
+  --section-tint-alt: rgba(7, 27, 66, 0.78);
   --hero-scrim: linear-gradient(90deg, rgba(4, 20, 51, 0.88) 0%, rgba(4, 20, 51, 0.58) 45%, rgba(4, 20, 51, 0.1) 75%);
   --hero-scrim-mobile: linear-gradient(180deg, rgba(4, 20, 51, 0.9) 0%, rgba(4, 20, 51, 0.78) 55%, rgba(4, 20, 51, 0.55) 100%);
 }
@@ -75,8 +75,8 @@
   --footer-bg: #020B1F;
   --shadow-color: rgba(0, 0, 0, 0.55);
   --overlay: rgba(0, 0, 0, 0.65);
-  --section-tint: rgba(4, 20, 51, 0.90);
-  --section-tint-alt: rgba(7, 27, 66, 0.92);
+  --section-tint: rgba(4, 20, 51, 0.82);
+  --section-tint-alt: rgba(7, 27, 66, 0.78);
   --hero-scrim: linear-gradient(90deg, rgba(4, 20, 51, 0.88) 0%, rgba(4, 20, 51, 0.58) 45%, rgba(4, 20, 51, 0.1) 75%);
   --hero-scrim-mobile: linear-gradient(180deg, rgba(4, 20, 51, 0.9) 0%, rgba(4, 20, 51, 0.78) 55%, rgba(4, 20, 51, 0.55) 100%);
 }
