@@ -1,5 +1,5 @@
 <aside id="cookie-banner" class="cookie-banner" aria-label="Preferencias de cookies" hidden>
-  <p>Usamos cookies de Meta para medir y mejorar nuestros anuncios. Podés aceptarlas o rechazarlas.</p>
+  <p>Usamos cookies de Meta para medir y mejorar nuestros anuncios.</p>
   <div class="cookie-actions">
     <button type="button" class="btn btn-ghost" data-cookie-choice="accept">Aceptar</button>
     <button type="button" class="btn btn-ghost" data-cookie-choice="reject">Rechazar</button>
@@ -47,5 +47,10 @@
   .cookie-banner[hidden] { display: none; }
   .cookie-banner p { max-width: 65ch; font-size: 0.95rem; }
   .cookie-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-  @media (max-width: 720px) { .cookie-banner { align-items: stretch; flex-direction: column; gap: 12px; padding: 16px; } .cookie-actions .btn { flex: 1; } }
+  @media (max-width: 720px) {
+    .cookie-banner { inset: auto 12px 12px; flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 14px; border-radius: 12px; }
+    .cookie-banner p { font-size: 0.8125rem; line-height: 1.4; }
+    .cookie-actions { flex-wrap: nowrap; gap: 8px; }
+    .cookie-actions .btn { flex: 1; padding: 8px 12px; font-size: 0.875rem; min-height: 40px; }
+  }
 </style>
