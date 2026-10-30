@@ -1,6 +1,8 @@
 ---
 import CheckoutModal from './CheckoutModal.astro';
 import MercadoPagoIcon from './MercadoPagoIcon.astro';
+import TrialDays from './TrialDays.astro';
+import { TRIAL_PROMO } from '../config';
 const plans = [
   {
     name: 'Gratuito',
@@ -64,8 +66,9 @@ const plans = [
     </div>
 
     <div class="trial-banner" data-anim style="--i:0">
-      <span class="trial-badge">Prueba gratuita</span>
-      <p class="trial-text">Probá el plan <strong>Avanzado</strong> gratis durante 30 días.</p>
+      <span class="trial-badge">{TRIAL_PROMO ? TRIAL_PROMO.label : 'Prueba gratuita'}</span>
+      <p class="trial-text">Probá el plan <strong>Avanzado</strong> gratis durante <TrialDays animate />.</p>
+      {TRIAL_PROMO && <p class="trial-note">{TRIAL_PROMO.endsLabel}</p>}
     </div>
 
     <div class="plans">
@@ -148,6 +151,7 @@ const plans = [
   }
   .trial-text { font-size: 1.05rem; }
   .trial-text strong { font-weight: 800; }
+  .trial-note { flex: 1 0 100%; text-align: center; font-size: 0.9rem; margin-top: 4px; text-wrap: balance; }
   .one-time-banner {
     margin-top: 32px;
     display: flex;

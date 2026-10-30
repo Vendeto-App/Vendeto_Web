@@ -88,6 +88,8 @@ html { scroll-behavior: smooth; }
 section[id] { scroll-margin-top: var(--header-h); }
 section[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
 
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
 body {
   font-family: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 1.0625rem;
@@ -293,5 +295,9 @@ html.motion.motion-reduced:not(.reveal-all) #precios[data-reveal]:not(.is-reveal
   html.motion-reduced #precios .plan.featured .amount::before {
     transition-duration: 400ms !important;
     animation-duration: 400ms !important;
+  }
+  html.motion-reduced .trial-days--animate .now {
+    transition-duration: 300ms !important;
+    animation-duration: 300ms !important;
   }
 }

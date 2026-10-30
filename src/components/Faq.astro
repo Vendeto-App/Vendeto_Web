@@ -1,7 +1,21 @@
 ---
+import { TRIAL_DAYS, TRIAL_PROMO } from '../config';
+const trialQuestion = {
+  question: `¿Qué pasa cuando termina la prueba de ${TRIAL_DAYS} días?`,
+  answer: 'Seguís usando Vendeto con el plan Gratuito, o elegís un plan pago.',
+};
+const promoQuestion = TRIAL_PROMO
+  ? [
+      {
+        question: `¿La prueba siempre dura ${TRIAL_DAYS} días?`,
+        answer: `${TRIAL_PROMO.label}: te registrás y tenés ${TRIAL_DAYS} días del plan Avanzado. ${TRIAL_PROMO.endsLabel}`,
+      },
+    ]
+  : [];
 const questions = [
   { question: '¿Necesito internet para vender?', answer: 'No. Vendeto sigue registrando ventas sin conexión.' },
-  { question: '¿Qué pasa cuando termina la prueba de 30 días?', answer: 'Seguís usando Vendeto con el plan Gratuito, o elegís un plan pago.' },
+  trialQuestion,
+  ...promoQuestion,
   { question: '¿Funciona en celular?', answer: 'Vendeto se instala en una computadora con Windows.' },
   { question: '¿Cómo recibo mi licencia?', answer: 'No tenés que hacer nada: después del pago, Vendeto detecta tu licencia automáticamente.' },
   { question: '¿Puedo pagar una sola vez en lugar de todos los meses?', answer: 'Sí, con las licencias largas.' },
