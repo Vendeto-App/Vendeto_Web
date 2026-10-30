@@ -117,6 +117,17 @@ const socialImage = new URL('/og-image.png', Astro.site);
           if (!target) return;
           e.preventDefault();
           var behavior = reduce.matches ? 'auto' : 'smooth';
+          document.documentElement.dataset.anchorJump = '1';
+          var clearJump = function () {
+            delete document.documentElement.dataset.anchorJump;
+            window.removeEventListener('scrollend', clearJump);
+            window.dispatchEvent(new Event('vendeto-anchor-jump-end'));
+          };
+          if ('onscrollend' in window) {
+            window.addEventListener('scrollend', clearJump, { once: true });
+          } else {
+            setTimeout(clearJump, 1200);
+          }
           if (id === 'inicio') window.scrollTo({ top: 0, behavior: behavior });
           else target.scrollIntoView({ behavior: behavior, block: 'start' });
           history.replaceState(null, '', location.pathname + location.search);

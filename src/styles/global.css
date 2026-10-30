@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  --header-h: 73px;
   --bg: #FFFFFF;
   --bg-alt: #E6ECF6;
   --surface: #FFFFFF;
@@ -84,7 +85,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
-section[id] { scroll-margin-top: 88px; }
+section[id] { scroll-margin-top: var(--header-h); }
 section[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
 
 body {

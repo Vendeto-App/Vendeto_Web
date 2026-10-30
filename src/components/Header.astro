@@ -145,6 +145,11 @@ const links = [
       ticking = true;
       requestAnimationFrame(function () {
         ticking = false;
+        if (document.documentElement.dataset.anchorJump === '1') {
+          header.classList.remove('is-hidden');
+          lastY = window.scrollY;
+          return;
+        }
         if (!mobile.matches) {
           header.classList.remove('is-hidden');
           lastY = window.scrollY;
@@ -176,6 +181,10 @@ const links = [
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('vendeto-anchor-jump-end', function () {
+      header.classList.remove('is-hidden');
+      lastY = window.scrollY;
+    });
   })();
 </script>
 
