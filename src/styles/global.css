@@ -226,20 +226,6 @@ html.motion:not(.reveal-all) #precios[data-reveal]:not(.is-revealed) .plan.featu
 .instagram [data-anim] { transition-duration: 500ms; transition-delay: calc(var(--i, 0) * 80ms); }
 #contacto [data-anim] { transition-delay: calc(var(--i, 0) * 120ms); }
 
-/* Comparison animates the wrapper on desktop and the cards on mobile. */
-@media (min-width: 600px) {
-  html.motion:not(.reveal-all) .comparison tbody tr[data-anim]:not(.is-revealed) {
-    opacity: 1;
-    transform: none;
-  }
-}
-@media (max-width: 599px) {
-  html.motion:not(.reveal-all) .comparison .table-wrap[data-anim]:not(.is-revealed) {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 /* Reduced motion: opacity-only fades, 400ms max. */
 html.motion-reduced .hero h1 { animation-name: rise-reduced; }
 html.motion.motion-reduced:not(.reveal-all) [data-anim]:not(.is-revealed),

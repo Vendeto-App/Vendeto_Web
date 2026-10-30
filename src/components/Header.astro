@@ -55,7 +55,13 @@ const links = [
     <li><a href="/licencias-largas" class="drawer-licencias">Licencias largas</a></li>
     <li><a href="/renovar" class="drawer-renovar">Renovar licencia</a></li>
   </ul>
-  <div class="drawer-theme"><span>Modo oscuro</span><ThemeToggle /></div>
+  <div class="drawer-theme">
+    <div class="drawer-theme-text">
+      <span class="drawer-theme-label">Tema</span>
+      <span class="drawer-theme-state" data-theme-state aria-hidden="true">Claro</span>
+    </div>
+    <ThemeToggle />
+  </div>
 </aside>
 
 <script is:inline>
@@ -111,6 +117,21 @@ const links = [
   })();
 </script>
 
+<script is:inline>
+  (function () {
+    var state = document.querySelector('[data-theme-state]');
+    if (!state) return;
+
+    function syncState() {
+      state.textContent = document.documentElement.dataset.theme === 'dark' ? 'Oscuro' : 'Claro';
+    }
+
+    window.addEventListener('vendeto-theme-change', syncState);
+    window.addEventListener('vendeto-theme-sync', syncState);
+    syncState();
+  })();
+</script>
+
 <style>
   .header {
     position: sticky;
@@ -138,7 +159,10 @@ const links = [
     :global(:root:not([data-theme="light"])) .logo-light { display: none; }
     :global(:root:not([data-theme="light"])) .brand-logo.logo-dark { display: block; }
   }
-  .drawer-theme { display: none; align-items: center; justify-content: space-between; margin-top: 20px; padding: 14px 12px; color: var(--text); }
+  .drawer-theme { display: none; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding: 16px 12px 0; border-top: 1px solid var(--border); color: var(--text); }
+  .drawer-theme-text { display: flex; flex-direction: column; gap: 2px; }
+  .drawer-theme-label { color: var(--text); font-weight: 600; }
+  .drawer-theme-state { color: var(--text-2); font-size: 0.875rem; }
   @media (max-width: 599px) { .header-theme { display: none; } .drawer-theme { display: flex; } }
   .desktop-links, .nav-actions { display: flex; align-items: center; gap: 20px; }
   .desktop-links a, .renew-link { color: var(--text-2); font-size: 0.9rem; font-weight: 500; white-space: nowrap; }
