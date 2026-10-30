@@ -1,11 +1,12 @@
 ---
+import SplitWords from './SplitWords.astro';
 const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
 ---
 
-<section id="contacto" class="section contact">
+<section id="contacto" class="section contact" data-reveal>
   <div class="container contact-grid">
-    <div class="contact-copy">
-      <h2 class="section-title">¿Tenés una consulta?</h2>
+    <div class="contact-copy" data-anim style="--i:0">
+      <h2 class="section-title"><SplitWords text="¿Tenés una consulta?" /></h2>
       <p class="section-sub">
         Dejanos tu nombre, tu email y tu consulta. Te respondemos a la brevedad.
       </p>
@@ -16,7 +17,7 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
       </ul>
     </div>
 
-    <form class="contact-form" data-contact-form>
+    <form class="contact-form" data-contact-form data-anim style="--i:1">
       <div class="field">
         <label for="contact-nombre">Nombre</label>
         <input id="contact-nombre" name="nombre" type="text" maxlength="100" required autocomplete="name" placeholder="Tu nombre" />

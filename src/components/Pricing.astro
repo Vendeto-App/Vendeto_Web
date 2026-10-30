@@ -1,5 +1,6 @@
 ---
 import CheckoutModal from './CheckoutModal.astro';
+import SplitWords from './SplitWords.astro';
 import MercadoPagoIcon from './MercadoPagoIcon.astro';
 const plans = [
   {
@@ -57,20 +58,20 @@ const plans = [
 <section id="precios" class="section pricing" data-reveal>
   <div class="container">
     <div class="center">
-      <h2 class="section-title">Precios claros, sin letra chica</h2>
+      <h2 class="section-title"><SplitWords text="Precios claros, sin letra chica" /></h2>
       <p class="section-sub">
         Empezá gratis y pasate a un plan pago cuando lo necesites.
       </p>
     </div>
 
-    <div class="trial-banner">
+    <div class="trial-banner" data-anim style="--i:0">
       <span class="trial-badge">Prueba gratuita</span>
       <p class="trial-text">Probá el plan <strong>Avanzado</strong> gratis durante 30 días.</p>
     </div>
 
     <div class="plans">
-      {plans.map((p) => (
-        <article class:list={['plan', { featured: p.featured }]}>
+      {plans.map((p, planIndex) => (
+        <article class:list={['plan', { featured: p.featured }]} data-anim style={`--i:${planIndex + 1}`}>
           <span class:list={['plan-tag', { 'plan-tag--featured': p.featured }]}>{p.tag}</span>
           <h3 class="plan-name">{p.name}</h3>
           <p class="plan-desc">{p.desc}</p>
@@ -112,7 +113,7 @@ const plans = [
       ))}
     </div>
 
-    <div class="one-time-banner">
+    <div class="one-time-banner" data-anim style={`--i:${plans.length + 1}`}>
       <p class="one-time-text">
         <strong>¿Cansado de las suscripciones?</strong> Revisá nuestras licencias extendidas:
       </p>

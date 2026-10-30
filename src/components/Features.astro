@@ -1,4 +1,5 @@
 ---
+import SplitWords from './SplitWords.astro';
 const rawGroups = [
   {
     title: 'Cobrar',
@@ -33,10 +34,10 @@ const groups = rawGroups.map((group) => {
 ---
 <section id="features" class="section features" data-reveal>
   <div class="container">
-    <h2 class="section-title">Todo lo del mostrador, en un solo programa</h2>
+    <h2 class="section-title"><SplitWords text="Todo lo del mostrador, en un solo programa" /></h2>
     <div class="groups">
-      {groups.map((group) => (
-        <div class="group">
+      {groups.map((group, groupIndex) => (
+        <div class="group" data-anim style={`--i:${groupIndex}`}>
           <h3>{group.title}</h3>
           <ul>
             {group.items.map((item, index) => (

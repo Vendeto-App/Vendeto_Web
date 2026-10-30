@@ -36,9 +36,11 @@ const socialImage = new URL('/og-image.png', Astro.site);
           }
         });
         window.addEventListener('vendeto-theme-change', function () { explicit = true; });
-        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-        if ('IntersectionObserver' in window && !reduce.matches) {
+        if ('IntersectionObserver' in window) {
           document.documentElement.classList.add('motion');
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('motion-reduced');
+          }
           setTimeout(function () {
             if (!window.__vendetoReveal) document.documentElement.classList.add('reveal-all');
           }, 2500);

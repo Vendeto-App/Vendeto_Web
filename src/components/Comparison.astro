@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import SplitWords from './SplitWords.astro';
 import cuaderno from '../assets/photos/cuaderno.jpg';
 const rows = [
   { label: 'Saber qué stock te queda', notebook: 'A ojo', vendeto: 'Al instante' },
@@ -10,16 +11,16 @@ const rows = [
 ---
 <section class="section comparison" data-reveal>
   <div class="container">
-    <h2 class="section-title">Cuaderno o Vendeto</h2>
+    <h2 class="section-title"><SplitWords text="Cuaderno o Vendeto" /></h2>
     <div class="comparison-content">
-      <Image src={cuaderno} width={469} height={445} alt="Cuaderno con ventas y stock anotados a mano" loading="lazy" decoding="async" class="comparison-photo" />
-      <div class="table-wrap" role="region" aria-label="Comparación de cuaderno o Excel con Vendeto" tabindex="0">
+      <Image src={cuaderno} width={469} height={445} alt="Cuaderno con ventas y stock anotados a mano" loading="lazy" decoding="async" class="comparison-photo" data-anim style="--i:0" />
+      <div class="table-wrap" role="region" aria-label="Comparación de cuaderno o Excel con Vendeto" tabindex="0" data-anim style="--i:1">
         <table>
           <caption>Comparación de cuaderno o Excel con Vendeto</caption>
           <thead><tr><th scope="col"><span class="sr-only">Tarea</span></th><th scope="col">Cuaderno / Excel</th><th scope="col" class="vendeto">Vendeto</th></tr></thead>
           <tbody>
             {rows.map((row, index) => (
-              <tr>
+              <tr data-anim style={`--i:${index + 1}`}>
                 <th scope="row">{row.label}</th><td data-label="Cuaderno / Excel">{row.notebook}</td>
                 <td class="vendeto" data-label="Vendeto"><span class="result"><svg style={`--i:${index}`} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>{row.vendeto}</span></td>
               </tr>

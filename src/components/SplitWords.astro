@@ -1,0 +1,6 @@
+---
+interface Props { text: string; start?: number }
+const { text, start = 0 } = Astro.props;
+const words = text.split(' ');
+---
+{words.map((w, i) => (<><span class="w" style={`--w:${start + i}`}>{w}</span>{i < words.length - 1 ? ' ' : ''}</>))}
