@@ -160,21 +160,21 @@ a { color: inherit; text-decoration: none; }
   transition: opacity 600ms cubic-bezier(.22, 1, .36, 1), transform 600ms cubic-bezier(.22, 1, .36, 1);
   transition-delay: calc(var(--i, 0) * 100ms);
 }
-.section-title .w {
-  display: inline-block;
-  transition: opacity 500ms cubic-bezier(.22, 1, .36, 1), transform 500ms cubic-bezier(.22, 1, .36, 1);
-  transition-delay: calc(var(--w, 0) * 50ms);
+.section-title {
+  transition: opacity 600ms cubic-bezier(.22, 1, .36, 1), transform 600ms cubic-bezier(.22, 1, .36, 1);
 }
-html.motion .hero h1 .w {
-  animation: rise 500ms cubic-bezier(.22, 1, .36, 1) both;
-  animation-delay: calc(100ms + var(--w, 0) * 60ms);
+html.motion .hero h1 {
+  animation: rise 600ms cubic-bezier(.22, 1, .36, 1) both;
+  animation-delay: 100ms;
 }
-html.motion:not(.reveal-all) [data-reveal]:not(.is-revealed) [data-anim],
-html.motion:not(.reveal-all) [data-reveal]:not(.is-revealed) .section-title .w {
+html.motion:not(.reveal-all) [data-anim]:not(.is-revealed) {
   opacity: 0;
   transform: translateY(24px);
 }
-html.motion:not(.reveal-all) [data-reveal]:not(.is-revealed) .section-title .w { transform: translateY(18px); }
+html.motion:not(.reveal-all) [data-reveal] .section-title:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(18px);
+}
 
 #features .group li > svg {
   transition: opacity 300ms cubic-bezier(.3, 1.6, .5, 1), transform 300ms cubic-bezier(.3, 1.6, .5, 1);
@@ -228,22 +228,22 @@ html.motion:not(.reveal-all) #precios[data-reveal]:not(.is-revealed) .plan.featu
 
 /* Comparison animates the wrapper on desktop and the cards on mobile. */
 @media (min-width: 600px) {
-  html.motion:not(.reveal-all) .comparison[data-reveal]:not(.is-revealed) tbody tr[data-anim] {
+  html.motion:not(.reveal-all) .comparison tbody tr[data-anim]:not(.is-revealed) {
     opacity: 1;
     transform: none;
   }
 }
 @media (max-width: 599px) {
-  html.motion:not(.reveal-all) .comparison[data-reveal]:not(.is-revealed) .table-wrap[data-anim] {
+  html.motion:not(.reveal-all) .comparison .table-wrap[data-anim]:not(.is-revealed) {
     opacity: 1;
     transform: none;
   }
 }
 
 /* Reduced motion: opacity-only fades, 400ms max. */
-html.motion-reduced .hero h1 .w { animation-name: rise-reduced; }
-html.motion.motion-reduced:not(.reveal-all) [data-reveal]:not(.is-revealed) [data-anim],
-html.motion.motion-reduced:not(.reveal-all) [data-reveal]:not(.is-revealed) .section-title .w {
+html.motion-reduced .hero h1 { animation-name: rise-reduced; }
+html.motion.motion-reduced:not(.reveal-all) [data-anim]:not(.is-revealed),
+html.motion.motion-reduced:not(.reveal-all) [data-reveal] .section-title:not(.is-revealed) {
   transform: none;
 }
 html.motion.motion-reduced:not(.reveal-all) #features[data-reveal]:not(.is-revealed) .group li > svg,
@@ -265,7 +265,7 @@ html.motion.motion-reduced:not(.reveal-all) #precios[data-reveal]:not(.is-reveal
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  html.motion *:not([data-anim]):not(.w),
+  html.motion *:not([data-anim]):not(.section-title),
   html.motion *::before,
   html.motion *::after {
     animation-duration: 0.01ms !important;
@@ -273,7 +273,8 @@ html.motion.motion-reduced:not(.reveal-all) #precios[data-reveal]:not(.is-reveal
     transition-duration: 0.01ms !important;
   }
   html.motion-reduced [data-anim],
-  html.motion-reduced .w,
+  html.motion-reduced .section-title,
+  html.motion-reduced .hero h1,
   html.motion-reduced #features .group li > svg,
   html.motion-reduced .comparison .result svg,
   html.motion-reduced #por-que .reason::before,

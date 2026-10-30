@@ -1,6 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import SplitWords from './SplitWords.astro';
 import abierto from '../assets/photos/abierto.jpg';
 const reasons = [
   { title: 'Sigue vendiendo sin internet', description: 'Si se corta la conexión, el mostrador no para.' },
@@ -11,7 +10,7 @@ const reasons = [
 ---
 <section id="por-que" class="section why" data-reveal>
   <div class="container">
-    <h2 class="section-title"><SplitWords text="Pensado para el mostrador argentino" /></h2>
+    <h2 class="section-title">Pensado para el mostrador argentino</h2>
     <div class="why-intro">
       <p class="why-lead" data-anim style="--i:0">Vendeto arrancó en una casa de almacenero, no en una oficina. Venimos de familia de comerciantes y vimos de cerca lo que le pasa a un negocio de barrio con el stock, el fiado y los proveedores. Por eso lo hicimos simple: para que cualquiera lo pueda usar sin manual ni curso.</p>
       <Image src={abierto} width={640} height={340} alt="Cartel de ABIERTO en la puerta de un comercio de barrio" loading="lazy" decoding="async" class="why-photo" data-anim style="--i:1" />

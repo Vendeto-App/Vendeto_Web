@@ -1,5 +1,4 @@
 ---
-import SplitWords from './SplitWords.astro';
 const questions = [
   { question: '¿Necesito internet para vender?', answer: 'No. Vendeto sigue registrando ventas sin conexión.' },
   { question: '¿Qué pasa cuando termina la prueba de 30 días?', answer: 'Seguís usando Vendeto con el plan Gratuito, o elegís un plan pago.' },
@@ -12,7 +11,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntit
 ---
 <section id="preguntas" class="section faq" data-reveal>
   <div class="container">
-    <h2 class="section-title"><SplitWords text="Preguntas frecuentes" /></h2>
+    <h2 class="section-title">Preguntas frecuentes</h2>
     <div class="questions">
       {questions.map(({ question, answer }, index) => (
         <details data-anim style={`--i:${index}`}><summary>{question}<span aria-hidden="true" class="indicator"></span></summary><p>{answer}</p></details>
