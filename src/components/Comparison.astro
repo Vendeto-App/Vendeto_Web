@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import cuaderno from '../assets/photos/cuaderno.jpg';
+const rows = [
+  { label: 'Saber qué stock te queda', notebook: 'A ojo', vendeto: 'Al instante' },
+  { label: 'Cerrar la caja', notebook: 'Sumando a mano', vendeto: 'Automático' },
+  { label: 'Fiados', notebook: 'Anotados en papel', vendeto: 'Saldo por cliente' },
+  { label: 'Lo más vendido', notebook: 'No sabés', vendeto: 'Reporte listo' },
+];
+---
+<section class="section comparison" data-reveal>
+  <div class="container">
+    <h2 class="section-title">Cuaderno o Vendeto</h2>
+    <div class="comparison-content">
+      <Image src={cuaderno} width={469} height={445} alt="Cuaderno con ventas y stock anotados a mano" loading="lazy" decoding="async" class="comparison-photo" data-anim style="--i:0" />
+      <div class="table-wrap" role="region" aria-label="Comparación de cuaderno o Excel con Vendeto" tabindex="0" data-anim style="--i:1">
+        <table>
+          <caption>Comparación de cuaderno o Excel con Vendeto</caption>
+          <thead><tr><th scope="col"><span class="sr-only">Tarea</span></th><th scope="col">Cuaderno / Excel</th><th scope="col" class="vendeto">Vendeto</th></tr></thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr>
+                <th scope="row">{row.label}</th><td data-label="Cuaderno / Excel">{row.notebook}</td>
+                <td class="vendeto" data-label="Vendeto"><span class="result"><svg style={`--i:${index}`} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>{row.vendeto}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .comparison { background: var(--bg); }
+  .comparison-content { display: grid; gap: 32px; margin-top: 40px; min-width: 0; }
+  .comparison-photo { display: block; width: 100%; height: auto; border-radius: 14px; object-fit: cover; }
+  .table-wrap { min-width: 0; }
+  table { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; }
+  caption, .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  th, td { padding: 18px 20px; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; vertical-align: middle; }
+  thead th:nth-child(1) { width: 38%; }
+  thead th:nth-child(2) { width: 28%; }
+  thead th:nth-child(3) { width: 34%; }
+  th { color: var(--text); font-weight: 700; }
+  td { color: var(--text-2); }
+  .vendeto { background: var(--accent-tint); color: var(--text); }
+  .result { display: flex; align-items: center; gap: 10px; }
+  .result svg { flex: none; color: var(--ok); }
+  @media (max-width: 599px) {
+    table { font-size: 0.8125rem; }
+    th, td { padding: 12px 8px; }
+    thead th { font-size: 0.75rem; }
+    .result { gap: 6px; align-items: flex-start; }
+    .result svg { width: 16px; height: 16px; margin-top: 2px; }
+  }
+  @media (max-width: 899px) {
+    .comparison-photo { aspect-ratio: 16 / 10; }
+  }
+  @media (min-width: 900px) {
+    .comparison-content { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: stretch; }
+    .comparison-photo { grid-column: 2; grid-row: 1; height: 100%; max-width: none; }
+    .table-wrap { grid-column: 1; grid-row: 1; }
+  }
+</style>

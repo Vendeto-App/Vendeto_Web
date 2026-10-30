@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
+import wordmark from '../assets/brand/wordmark-color.png';
+import whiteWordmark from '../assets/brand/wordmark-white.png';
+import ThemeToggle from './ThemeToggle.astro';
 const links = [
   { href: '/#features', label: 'Funcionalidades' },
   { href: '/#precios', label: 'Precios' },
-  { href: '/#complementos', label: 'Complementos' },
   { href: '/#contacto', label: 'Contacto' },
 ];
 ---
@@ -19,18 +22,27 @@ const links = [
         <span></span><span></span><span></span>
       </button>
       <a href="/#inicio" class="brand">
-        <img src="/images/logo.png" alt="Vendeto" class="brand-logo" />
+        <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo logo-light" />
+        <Image src={whiteWordmark} alt="Vendeto" width={whiteWordmark.width} height={whiteWordmark.height} class="brand-logo logo-dark" />
       </a>
     </div>
-    <a href="/api/latest?download=1" class="btn btn-primary nav-cta">Descargar</a>
+    <div class="desktop-links">
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </div>
+    <div class="nav-actions">
+      <a href="/renovar" class="renew-link">Renovar licencia</a>
+      <div class="header-theme"><ThemeToggle /></div>
+      <a href="/api/latest?download=1" class="btn btn-primary nav-cta"><span>Descargar</span> <span class="download-extra">gratis</span></a>
+    </div>
   </nav>
 </header>
 
 <div class="drawer-backdrop" id="hamburger-backdrop"></div>
-<aside class="drawer" id="hamburger-drawer" aria-hidden="true">
+<aside class="drawer" id="hamburger-drawer" aria-hidden="true" inert>
   <div class="drawer-head">
     <a href="/#inicio" class="brand">
-      <img src="/images/logo.png" alt="Vendeto" class="brand-logo" />
+      <Image src={wordmark} alt="Vendeto" width={wordmark.width} height={wordmark.height} class="brand-logo logo-light" />
+      <Image src={whiteWordmark} alt="Vendeto" width={whiteWordmark.width} height={whiteWordmark.height} class="brand-logo logo-dark" />
     </a>
     <button type="button" class="drawer-close" aria-label="Cerrar menú">
       <span></span><span></span>
@@ -43,6 +55,13 @@ const links = [
     <li><a href="/licencias-largas" class="drawer-licencias">Licencias largas</a></li>
     <li><a href="/renovar" class="drawer-renovar">Renovar licencia</a></li>
   </ul>
+  <div class="drawer-theme">
+    <div class="drawer-theme-text">
+      <span class="drawer-theme-label">Tema</span>
+      <span class="drawer-theme-state" data-theme-state aria-hidden="true">Claro</span>
+    </div>
+    <ThemeToggle />
+  </div>
 </aside>
 
 <script is:inline>
@@ -57,14 +76,19 @@ const links = [
       drawer.classList.add('open');
       backdrop.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
+      drawer.inert = false;
       btn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      if (closeBtn) closeBtn.focus();
     }
 
     function close() {
+      if (!drawer.classList.contains('open')) return;
+      btn.focus();
       drawer.classList.remove('open');
       backdrop.classList.remove('open');
       drawer.setAttribute('aria-hidden', 'true');
+      drawer.inert = true;
       btn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     }
@@ -76,8 +100,81 @@ const links = [
       a.addEventListener('click', close);
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') close();
+      if (!drawer.classList.contains('open')) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key !== 'Tab') return;
+      var focusable = drawer.querySelectorAll('a[href], button:not([disabled])');
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !drawer.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !drawer.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
+      }
     });
+  })();
+</script>
+
+<script is:inline>
+  (function () {
+    var state = document.querySelector('[data-theme-state]');
+    if (!state) return;
+
+    function syncState() {
+      state.textContent = document.documentElement.dataset.theme === 'dark' ? 'Oscuro' : 'Claro';
+    }
+
+    window.addEventListener('vendeto-theme-change', syncState);
+    window.addEventListener('vendeto-theme-sync', syncState);
+    syncState();
+  })();
+</script>
+
+<script is:inline>
+  (function () {
+    var header = document.querySelector('.header');
+    if (!header) return;
+    var mobile = window.matchMedia('(max-width: 899px)');
+    var lastY = window.scrollY;
+    var ticking = false;
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        if (!mobile.matches) {
+          header.classList.remove('is-hidden');
+          lastY = window.scrollY;
+          return;
+        }
+        var y = window.scrollY;
+        var drawer = document.getElementById('hamburger-drawer');
+        var drawerOpen = drawer && drawer.classList.contains('open');
+        var focusInside = header.contains(document.activeElement);
+        if (y < 80) {
+          header.classList.remove('is-hidden');
+          lastY = y;
+          return;
+        }
+        if (drawerOpen || focusInside) {
+          lastY = y;
+          return;
+        }
+        var delta = y - lastY;
+        if (delta > 8) {
+          header.classList.add('is-hidden');
+          lastY = y;
+        } else if (delta < -8) {
+          header.classList.remove('is-hidden');
+          lastY = y;
+        }
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
   })();
 </script>
 
@@ -86,9 +183,8 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--ink-100);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
   }
   .nav {
     display: flex;
@@ -102,6 +198,22 @@ const links = [
     align-items: center;
     gap: 14px;
   }
+  .brand-logo.logo-dark { display: none; }
+  :global([data-theme="dark"]) .logo-light { display: none; }
+  :global([data-theme="dark"]) .brand-logo.logo-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .logo-light { display: none; }
+    :global(:root:not([data-theme="light"])) .brand-logo.logo-dark { display: block; }
+  }
+  .drawer-theme { display: none; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding: 16px 12px 0; border-top: 1px solid var(--border); color: var(--text); }
+  .drawer-theme-text { display: flex; flex-direction: column; gap: 2px; }
+  .drawer-theme-label { color: var(--text); font-weight: 600; }
+  .drawer-theme-state { color: var(--text-2); font-size: 0.875rem; }
+  @media (max-width: 599px) { .header-theme { display: none; } .drawer-theme { display: flex; } }
+  .desktop-links, .nav-actions { display: flex; align-items: center; gap: 20px; }
+  .desktop-links a, .renew-link { color: var(--text-2); font-size: 0.9rem; font-weight: 500; white-space: nowrap; }
+  .desktop-links a:hover, .renew-link:hover { color: var(--link); }
+  .nav-cta { white-space: nowrap; }
   .hamburger {
     display: flex;
     flex-direction: column;
@@ -110,19 +222,19 @@ const links = [
     width: 40px;
     height: 40px;
     padding: 8px;
-    border: 1px solid var(--ink-100);
+    border: 1px solid var(--border);
     border-radius: 10px;
-    background: #fff;
+    background: var(--surface);
     cursor: pointer;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
-  .hamburger:hover { border-color: var(--ink-500); }
+  .hamburger:hover { border-color: var(--text-2); }
   .hamburger span {
     display: block;
     height: 2px;
     width: 100%;
     border-radius: 2px;
-    background: var(--ink-700);
+    background: var(--text-2);
   }
   .brand-logo {
     height: 40px;
@@ -134,7 +246,7 @@ const links = [
     position: fixed;
     inset: 0;
     z-index: 90;
-    background: rgba(15, 23, 42, 0.45);
+    background: var(--overlay);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -151,9 +263,9 @@ const links = [
     width: min(320px, 85vw);
     height: 100%;
     padding: 20px;
-    background: #fff;
-    border-right: 1px solid var(--ink-100);
-    box-shadow: 0 0 40px rgba(15, 23, 42, 0.15);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 0 40px var(--shadow-color);
     overflow-y: auto;
     transform: translateX(-105%);
     transition: transform 0.3s ease;
@@ -165,7 +277,7 @@ const links = [
     align-items: center;
     justify-content: space-between;
     padding-bottom: 20px;
-    border-bottom: 1px solid var(--ink-100);
+    border-bottom: 1px solid var(--border);
   }
   .drawer-close {
     position: relative;
@@ -173,11 +285,11 @@ const links = [
     height: 36px;
     border: none;
     border-radius: 10px;
-    background: var(--ink-50);
+    background: var(--bg-alt);
     cursor: pointer;
     transition: background 0.2s ease;
   }
-  .drawer-close:hover { background: var(--ink-100); }
+  .drawer-close:hover { background: var(--border); }
   .drawer-close span {
     position: absolute;
     top: 50%;
@@ -185,7 +297,7 @@ const links = [
     width: 16px;
     height: 2px;
     border-radius: 2px;
-    background: var(--ink-700);
+    background: var(--text-2);
   }
   .drawer-close span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
   .drawer-close span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
@@ -202,22 +314,52 @@ const links = [
     display: block;
     padding: 14px 12px;
     border-radius: 10px;
-    color: var(--ink-700);
+    color: var(--text-2);
     font-weight: 500;
     font-size: 1.05rem;
     transition: background 0.2s ease, color 0.2s ease;
   }
   .drawer-links a:hover {
-    background: var(--ink-50);
-    color: var(--blue-600);
+    background: var(--bg-alt);
+    color: var(--link);
   }
   .drawer-links .drawer-renovar,
   .drawer-links .drawer-licencias {
     display: block;
-    color: var(--blue-600);
-    border-top: 1px solid var(--ink-100);
+    color: var(--link);
+    border-top: 1px solid var(--border);
     border-radius: 10px;
     padding-top: 20px;
   }
   .drawer-links .drawer-renovar { margin-top: 8px; }
+  @media (min-width: 900px) {
+    .hamburger { display: none; }
+    .brand-logo { height: 30px; }
+    .desktop-links, .nav-actions { gap: 12px; }
+    .desktop-links a, .renew-link { font-size: 0.8rem; }
+    .nav-cta { padding: 12px 16px; }
+  }
+  @media (max-width: 899px) {
+    .desktop-links, .renew-link { display: none; }
+    .header { transition: transform 250ms cubic-bezier(.22, 1, .36, 1); }
+    .header.is-hidden { transform: translateY(-100%); }
+    :global(html.motion.motion-reduced) .header { transition: opacity 250ms cubic-bezier(.22, 1, .36, 1) !important; }
+    :global(html.motion.motion-reduced) .header.is-hidden { transform: none; opacity: 0; }
+  }
+  @media (min-width: 1100px) {
+    .desktop-links a, .renew-link { font-size: 0.9rem; }
+  }
+  @media (min-width: 900px) and (max-width: 1099px) {
+    .nav { gap: 6px; }
+    .brand-logo { height: 24px; }
+    .desktop-links, .nav-actions { gap: 8px; }
+    .nav-cta { padding: 12px 10px; }
+  }
+  @media (max-width: 400px) {
+    .nav { width: calc(100% - 32px); gap: 8px; }
+    .nav-left { gap: 8px; }
+    .brand-logo { height: 28px; }
+    .nav-cta { padding: 12px 14px; }
+    .download-extra { display: none; }
+  }
 </style>

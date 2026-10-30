@@ -3,19 +3,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
+import WhyVendeto from '../components/WhyVendeto.astro';
+import Comparison from '../components/Comparison.astro';
 import Pricing from '../components/Pricing.astro';
-import Complementos from '../components/Complementos.astro';
+import Faq from '../components/Faq.astro';
+import InstagramStrip from '../components/InstagramStrip.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 ---
-<BaseLayout>
+<BaseLayout title="Vendeto — Punto de venta simple para tu comercio" description="Sistema de punto de venta simple para kioscos, almacenes y comercios: ventas, stock, caja y fiado en un solo lugar, sin manual ni curso. Probalo gratis 30 días.">
   <Header />
   <main>
     <Hero />
     <Features />
+    <WhyVendeto />
+    <Comparison />
     <Pricing />
-    <Complementos />
+    <Faq />
+    <InstagramStrip />
     <Contact />
   </main>
   <Footer />
 </BaseLayout>
+
+<script src="../scripts/reveal.ts"></script>

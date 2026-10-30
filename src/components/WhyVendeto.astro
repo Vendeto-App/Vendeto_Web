@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import abierto from '../assets/photos/abierto.jpg';
+const reasons = [
+  { title: 'Sigue vendiendo sin internet', description: 'Si se corta la conexión, el mostrador no para.' },
+  { title: 'Plan gratis de verdad', description: 'Después de la prueba seguís con el plan Gratuito, sin tarjeta.' },
+  { title: '+140.000 productos precargados', description: 'No empezás con el catálogo vacío.' },
+  { title: 'Licencias largas', description: 'Pagás por un período largo y te olvidás de las cuotas mensuales.', href: '/licencias-largas' },
+];
+---
+<section id="por-que" class="section why" data-reveal>
+  <div class="container">
+    <h2 class="section-title">Pensado para el mostrador argentino</h2>
+    <div class="why-intro">
+      <p class="why-lead" data-anim style="--i:0">Vendeto arrancó en una casa de almacenero, no en una oficina. Venimos de familia de comerciantes y vimos de cerca lo que le pasa a un negocio de barrio con el stock, el fiado y los proveedores. Por eso lo hicimos simple: para que cualquiera lo pueda usar sin manual ni curso.</p>
+      <Image src={abierto} width={640} height={340} alt="Cartel de ABIERTO en la puerta de un comercio de barrio" loading="lazy" decoding="async" class="why-photo" data-anim style="--i:1" />
+    </div>
+    <div class="reasons">
+      {reasons.map((reason, index) => (
+        <article class="reason" style={`--i:${index}`} data-anim>
+          <h3>{reason.title}</h3>
+          <p>{reason.description}</p>
+          {reason.href && <a href={reason.href}>Ver licencias largas</a>}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .why { background: var(--bg-alt); }
+  .why-intro { display: grid; gap: 32px; align-items: center; }
+  .why-lead { color: var(--text-2); font-size: 1.15rem; max-width: 60ch; }
+  .why-photo { display: block; width: 100%; max-width: 420px; height: auto; border-radius: 14px; }
+  .reasons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 56px; margin-top: 48px; }
+  .reason { border-top: 1px solid var(--border); padding-top: 20px; }
+  .reason h3 { font-size: 1.2rem; margin-bottom: 8px; }
+  .reason p { color: var(--text-2); max-width: 55ch; }
+  .reason a { display: inline-block; margin-top: 12px; color: var(--link); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  @media (min-width: 900px) { .why-intro { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 48px; } }
+  @media (max-width: 720px) { .reasons { grid-template-columns: 1fr; } }
+</style>

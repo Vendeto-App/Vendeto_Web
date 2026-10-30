@@ -1,0 +1,45 @@
+---
+const questions = [
+  { question: '¿Necesito internet para vender?', answer: 'No. Vendeto sigue registrando ventas sin conexión.' },
+  { question: '¿Qué pasa cuando termina la prueba de 30 días?', answer: 'Seguís usando Vendeto con el plan Gratuito, o elegís un plan pago.' },
+  { question: '¿Funciona en celular?', answer: 'Vendeto se instala en una computadora con Windows.' },
+  { question: '¿Cómo recibo mi licencia?', answer: 'Te llega por email después del pago.' },
+  { question: '¿Puedo pagar una sola vez en lugar de todos los meses?', answer: 'Sí, con las licencias largas.' },
+  { question: '¿Qué medios de pago puedo cobrar en mi local?', answer: 'Efectivo, débito, crédito, transferencia y QR.' },
+];
+const schema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: questions.map(({ question, answer }) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })) };
+---
+<section id="preguntas" class="section faq" data-reveal>
+  <div class="container">
+    <h2 class="section-title">Preguntas frecuentes</h2>
+    <div class="questions">
+      {questions.map(({ question, answer }, index) => (
+        <details name="faq" data-anim style={`--i:${index}`}>
+          <summary>{question}<span aria-hidden="true" class="indicator"></span></summary>
+          <div class="faq-answer"><p>{answer}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+<!-- TODO(owner): add printer / ARCA invoicing FAQ once confirmed -->
+<script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+<script src="../scripts/faq.ts"></script>
+
+<style>
+  .faq { background: var(--bg); }
+  .questions { margin-top: 40px; max-width: 800px; }
+  details { border-bottom: 1px solid var(--border); }
+  details:first-child { border-top: 1px solid var(--border); }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0; font-weight: 700; cursor: pointer; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  .indicator { position: relative; width: 16px; height: 16px; flex: none; color: var(--link); }
+  .indicator::before, .indicator::after {
+    content: ''; position: absolute; left: 0; top: 7px; width: 16px; height: 2px;
+    background: currentColor; border-radius: 2px;
+    transition: transform 300ms cubic-bezier(.22,1,.36,1);
+  }
+  .indicator::after { transform: rotate(90deg); }
+  details[open] .indicator::after { transform: rotate(0deg); }
+  .faq-answer p { color: var(--text-2); padding-bottom: 20px; max-width: 65ch; }
+</style>

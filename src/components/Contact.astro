@@ -2,22 +2,21 @@
 const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
 ---
 
-<section id="contacto" class="section">
+<section id="contacto" class="section contact" data-reveal>
   <div class="container contact-grid">
-    <div class="contact-copy">
-      <span class="eyebrow">Contacto</span>
+    <div class="contact-copy" data-anim style="--i:0">
       <h2 class="section-title">¿Tenés una consulta?</h2>
       <p class="section-sub">
         Dejanos tu nombre, tu email y tu consulta. Te respondemos a la brevedad.
       </p>
       <ul class="contact-links">
+        <li><a class="contact-whatsapp" href="https://wa.me/5491138663629?text=Hola%2C%20quiero%20info%20sobre%20Vendeto" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="mailto:soporte@vendeto.com.ar">soporte@vendeto.com.ar</a></li>
-        <li><a href="https://wa.me/5491138663629?text=Hola%2C%20quiero%20info%20sobre%20Vendeto" target="_blank" rel="noopener">WhatsApp</a></li>
         <li><a href="tel:+5491138663629">+54 9 11 3866-3629</a></li>
       </ul>
     </div>
 
-    <form class="contact-form" data-contact-form action="#contacto" method="post">
+    <form class="contact-form" data-contact-form data-anim style="--i:1">
       <div class="field">
         <label for="contact-nombre">Nombre</label>
         <input id="contact-nombre" name="nombre" type="text" maxlength="100" required autocomplete="name" placeholder="Tu nombre" />
@@ -84,6 +83,7 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
 </script>
 
 <style>
+  .contact { background: var(--bg); }
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -96,15 +96,15 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
   }
   .contact-links li { margin-bottom: 12px; }
   .contact-links a {
-    color: var(--blue-600);
+    color: var(--link);
     font-weight: 600;
   }
   .contact-links a:hover { text-decoration: underline; }
+  .contact-links .contact-whatsapp { display: inline-flex; padding: 12px 20px; border: 1px solid var(--link); border-radius: 6px; }
   .contact-form {
-    background: var(--white);
-    border: 1px solid var(--ink-100);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
     padding: 32px;
   }
   .field { margin-bottom: 20px; }
@@ -112,33 +112,31 @@ const CONTACT_URL = 'https://posweb-mailer.chiacchio-eze01.workers.dev/contact';
     display: block;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--ink-700);
+    color: var(--text-2);
     margin-bottom: 8px;
   }
   .field input,
   .field textarea {
     width: 100%;
-    border: 1px solid var(--ink-100);
-    border-radius: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     padding: 12px 14px;
     font-size: 1rem;
     font-family: inherit;
-    color: var(--ink-900);
-    background: var(--ink-50);
+    color: var(--text);
+    background: var(--surface);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .field input:focus,
   .field textarea:focus {
-    outline: none;
-    border-color: var(--blue-600);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    background: var(--white);
+    border-color: var(--link);
+    background: var(--surface);
   }
   .field textarea { resize: vertical; }
   .contact-submit { width: 100%; }
   .contact-status { margin-top: 16px; font-size: 0.9rem; }
-  .contact-status-success { color: #16a34a; }
-  .contact-status-error { color: #dc2626; }
+  .contact-status-success { color: var(--ok); }
+  .contact-status-error { color: var(--danger); }
   @media (max-width: 860px) {
     .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   }

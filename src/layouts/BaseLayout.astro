@@ -2,46 +2,129 @@
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
 import MobileInstaller from '../components/MobileInstaller.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
 interface Props {
   title?: string;
   description?: string;
 }
 const { title = 'Vendeto — Punto de Venta para tu comercio', description = 'Sistema de punto de venta (POS) para comercios minoristas: ventas, stock, clientes, cajas y deudas en un solo lugar.' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL('/og-image.png', Astro.site);
 ---
 <!doctype html>
 <html lang="es">
   <head>
+    <script is:inline>
+      (function () {
+        try { history.scrollRestoration = 'manual'; } catch (_) {}
+        try {
+          var nav = performance.getEntriesByType('navigation')[0];
+          if (nav && nav.type === 'reload' && location.hash) {
+            history.replaceState(null, '', location.pathname + location.search);
+          }
+        } catch (_) {}
+        var stored;
+        try { stored = localStorage.getItem('vendeto-theme'); } catch (_) {}
+        document.documentElement.dataset.theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+        if ('IntersectionObserver' in window) {
+          document.documentElement.classList.add('motion');
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('motion-reduced');
+          }
+          setTimeout(function () {
+            if (!window.__vendetoReveal) document.documentElement.classList.add('reveal-all');
+          }, 2500);
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#041433" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <title>{title}</title>
-    <!-- Meta Pixel Code -->
-    <script is:inline>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '2521342231676792');
-      fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=2521342231676792&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
     <Analytics />
   </head>
   <body>
     <slot />
     <MobileInstaller />
+    <WhatsAppButton />
+    <CookieBanner />
+    <script is:inline>
+      (function () {
+        var toggles = document.querySelectorAll('[data-theme-toggle]');
+        function sync() {
+          var dark = document.documentElement.dataset.theme === 'dark';
+          toggles.forEach(function (toggle) { toggle.setAttribute('aria-checked', String(dark)); });
+        }
+        function setThemeColor(theme) {
+          var metas = document.querySelectorAll('meta[name="theme-color"]');
+          var meta = metas[0];
+          if (!meta) return;
+          meta.removeAttribute('media');
+          meta.content = theme === 'dark' ? '#041433' : '#FFFFFF';
+          for (var i = 1; i < metas.length; i++) metas[i].remove();
+        }
+        toggles.forEach(function (toggle) {
+          toggle.addEventListener('click', function () {
+            var theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = theme;
+            try { localStorage.setItem('vendeto-theme', theme); } catch (_) {}
+            window.dispatchEvent(new Event('vendeto-theme-change'));
+            setThemeColor(theme);
+            sync();
+          });
+        });
+        window.addEventListener('vendeto-theme-sync', sync);
+        setThemeColor(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+        sync();
+      })();
+    </script>
+    <script is:inline>
+      (function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        document.addEventListener('click', function (e) {
+          if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          if (!link) return;
+          var url = new URL(link.getAttribute('href'), location.href);
+          if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash) return;
+          var id = decodeURIComponent(url.hash.slice(1));
+          var target = id === 'inicio' ? document.body : document.getElementById(id);
+          if (!target) return;
+          e.preventDefault();
+          var behavior = reduce.matches ? 'auto' : 'smooth';
+          if (id === 'inicio') window.scrollTo({ top: 0, behavior: behavior });
+          else target.scrollIntoView({ behavior: behavior, block: 'start' });
+          history.replaceState(null, '', location.pathname + location.search);
+          setTimeout(function () {
+            if (target === document.body) return;
+            if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+            target.focus({ preventScroll: true });
+          }, 0);
+        });
+      })();
+    </script>
     <script is:inline>
       document.addEventListener('click', function (e) {
         var el = e.target && e.target.closest ? e.target.closest('a[href*="download=1"]') : null;
