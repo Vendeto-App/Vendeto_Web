@@ -9,18 +9,22 @@
 
     var heroVisible = true;
     var contactVisible = false;
+    var showState = false;
     var hideTimer;
 
     function sync() {
       var show = !heroVisible && !contactVisible;
+      showState = show;
       clearTimeout(hideTimer);
       if (show) {
         bar.hidden = false;
-        requestAnimationFrame(function () { bar.classList.add('is-visible'); });
+        requestAnimationFrame(function () {
+          if (showState) bar.classList.add('is-visible');
+        });
       } else {
         bar.classList.remove('is-visible');
         hideTimer = setTimeout(function () {
-          if (!bar.classList.contains('is-visible')) bar.hidden = true;
+          if (!showState) bar.hidden = true;
         }, 250);
       }
     }
