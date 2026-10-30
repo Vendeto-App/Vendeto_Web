@@ -1,0 +1,69 @@
+<a href="/api/latest?download=1" class="mobile-dl" data-mobile-dl hidden>Descargar gratis · 30 días</a>
+
+<script is:inline>
+  (function () {
+    var bar = document.querySelector('[data-mobile-dl]');
+    var hero = document.getElementById('inicio');
+    var contact = document.getElementById('contacto');
+    if (!bar || !hero || !contact || !('IntersectionObserver' in window)) return;
+
+    var heroVisible = true;
+    var contactVisible = false;
+    var hideTimer;
+
+    function sync() {
+      var show = !heroVisible && !contactVisible;
+      clearTimeout(hideTimer);
+      if (show) {
+        bar.hidden = false;
+        requestAnimationFrame(function () { bar.classList.add('is-visible'); });
+      } else {
+        bar.classList.remove('is-visible');
+        hideTimer = setTimeout(function () {
+          if (!bar.classList.contains('is-visible')) bar.hidden = true;
+        }, 250);
+      }
+    }
+
+    new IntersectionObserver(function (entries) {
+      heroVisible = entries[0].isIntersecting;
+      sync();
+    }).observe(hero);
+
+    new IntersectionObserver(function (entries) {
+      contactVisible = entries[0].isIntersecting;
+      sync();
+    }).observe(contact);
+  })();
+</script>
+
+<style>
+  .mobile-dl {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 70;
+    display: block;
+    padding: 14px;
+    text-align: center;
+    font-weight: 700;
+    border-radius: 14px;
+    background: var(--btn-bg);
+    color: var(--on-btn);
+    box-shadow: 0 8px 24px var(--shadow-color);
+    transform: translateY(140%);
+    transition: transform 250ms cubic-bezier(.22, 1, .36, 1);
+  }
+  .mobile-dl.is-visible { transform: translateY(0); }
+  .mobile-dl[hidden] { display: none; }
+  @media (min-width: 900px) { .mobile-dl { display: none; } }
+  :global(html.motion-reduced) .mobile-dl {
+    transform: none;
+    opacity: 0;
+    transition: opacity 250ms cubic-bezier(.22, 1, .36, 1) !important;
+  }
+  :global(html.motion-reduced) .mobile-dl.is-visible { opacity: 1; }
+  :global(body:has(.mobile-dl.is-visible)) :global(.whatsapp-float) { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  :global(body:has(#cookie-banner:not([hidden]))) .mobile-dl { display: none; }
+</style>
