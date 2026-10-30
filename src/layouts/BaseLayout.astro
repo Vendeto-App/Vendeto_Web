@@ -4,11 +4,13 @@ import Analytics from '@vercel/analytics/astro';
 import MobileInstaller from '../components/MobileInstaller.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
+import PageBackground from '../components/PageBackground.astro';
 interface Props {
   title?: string;
   description?: string;
+  pageBackground?: boolean;
 }
-const { title = 'Vendeto — Punto de Venta para tu comercio', description = 'Sistema de punto de venta (POS) para comercios minoristas: ventas, stock, clientes, cajas y deudas en un solo lugar.' } = Astro.props;
+const { title = 'Vendeto — Punto de Venta para tu comercio', description = 'Sistema de punto de venta (POS) para comercios minoristas: ventas, stock, clientes, cajas y deudas en un solo lugar.', pageBackground = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL('/og-image.png', Astro.site);
 ---
@@ -65,7 +67,8 @@ const socialImage = new URL('/og-image.png', Astro.site);
     <title>{title}</title>
     <Analytics />
   </head>
-  <body>
+  <body class:list={[{ 'has-page-bg': pageBackground }]}>
+    {pageBackground && <PageBackground />}
     <slot />
     <MobileInstaller />
     <WhatsAppButton />
@@ -114,6 +117,17 @@ const socialImage = new URL('/og-image.png', Astro.site);
           if (!target) return;
           e.preventDefault();
           var behavior = reduce.matches ? 'auto' : 'smooth';
+          document.documentElement.dataset.anchorJump = '1';
+          var clearJump = function () {
+            delete document.documentElement.dataset.anchorJump;
+            window.removeEventListener('scrollend', clearJump);
+            window.dispatchEvent(new Event('vendeto-anchor-jump-end'));
+          };
+          if ('onscrollend' in window) {
+            window.addEventListener('scrollend', clearJump, { once: true });
+          } else {
+            setTimeout(clearJump, 1200);
+          }
           if (id === 'inicio') window.scrollTo({ top: 0, behavior: behavior });
           else target.scrollIntoView({ behavior: behavior, block: 'start' });
           history.replaceState(null, '', location.pathname + location.search);

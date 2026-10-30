@@ -145,6 +145,11 @@ const links = [
       ticking = true;
       requestAnimationFrame(function () {
         ticking = false;
+        if (document.documentElement.dataset.anchorJump === '1') {
+          header.classList.remove('is-hidden');
+          lastY = window.scrollY;
+          return;
+        }
         if (!mobile.matches) {
           header.classList.remove('is-hidden');
           lastY = window.scrollY;
@@ -153,7 +158,8 @@ const links = [
         var y = window.scrollY;
         var drawer = document.getElementById('hamburger-drawer');
         var drawerOpen = drawer && drawer.classList.contains('open');
-        var focusInside = header.contains(document.activeElement);
+        var active = document.activeElement;
+        var focusInside = header.contains(active) && active.matches(':focus-visible');
         if (y < 80) {
           header.classList.remove('is-hidden');
           lastY = y;
@@ -175,6 +181,10 @@ const links = [
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('vendeto-anchor-jump-end', function () {
+      header.classList.remove('is-hidden');
+      lastY = window.scrollY;
+    });
   })();
 </script>
 

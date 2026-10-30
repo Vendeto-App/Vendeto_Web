@@ -1,11 +1,17 @@
 ---
-const rawGroups = [
+import { MERCADO_PAGO_PATH } from '../icons/mercadopago';
+
+type FeatureItem = { title: string; description: string; icon?: string; brand?: 'mercadopago' };
+type FeatureGroup = { title: string; items: FeatureItem[] };
+
+const rawGroups: FeatureGroup[] = [
   {
     title: 'Cobrar',
     items: [
       { title: 'Ventas rápidas', description: 'Efectivo, débito, crédito, transferencia y QR.', icon: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h2"/>' },
       { title: 'Productos por código de barras', description: 'Por unidad, kilo o litro, con categorías.', icon: '<path d="M3 5v14"/><path d="M8 5v14"/><path d="M12 5v14"/><path d="M17 5v14"/><path d="M21 5v14"/>' },
       { title: 'Clientes y fiado', description: 'Cuentas corrientes con el saldo de cada cliente.', icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>' },
+      { title: 'Cobros con Mercado Pago', description: 'Vinculás tu cuenta, mostrás el QR y el pago se verifica al instante. En el plan Avanzado.', brand: 'mercadopago' },
     ],
   },
   {
@@ -41,7 +47,11 @@ const groups = rawGroups.map((group) => {
           <ul>
             {group.items.map((item, index) => (
               <li>
-                <svg style={`--i:${group.start + index}`} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={item.icon} />
+                {item.brand === 'mercadopago' ? (
+                  <svg style={`--i:${group.start + index}`} width="24" height="24" viewBox="0 0 24 24" fill="var(--mercadopago)" aria-hidden="true"><path d={MERCADO_PAGO_PATH} /></svg>
+                ) : (
+                  <svg style={`--i:${group.start + index}`} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={item.icon} />
+                )}
                 <div><strong>{item.title}</strong><p>{item.description}</p></div>
               </li>
             ))}

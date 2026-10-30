@@ -1,0 +1,70 @@
+---
+import { getImage } from 'astro:assets';
+import bgDark from '../assets/bg/hero-dark.webp';
+import bgLight from '../assets/bg/hero-light.webp';
+import bgDarkMobile from '../assets/bg/hero-dark-mobile.webp';
+import bgLightMobile from '../assets/bg/hero-light-mobile.webp';
+
+const vars: string[] = [];
+
+const groups = [
+  { name: 'dark', src: bgDark, widths: [960, 1920] },
+  { name: 'light', src: bgLight, widths: [960, 1920] },
+  { name: 'dark-mobile', src: bgDarkMobile, widths: [720, 941] },
+  { name: 'light-mobile', src: bgLightMobile, widths: [720, 941] },
+];
+
+for (const group of groups) {
+  for (const width of group.widths) {
+    for (const format of ['avif', 'webp']) {
+      const image = await getImage({ src: group.src, width, format });
+      vars.push(`--page-bg-${group.name}-${width}-${format}: url('${image.src}')`);
+    }
+  }
+}
+---
+<div class="page-bg" aria-hidden="true" style={vars.join('; ')}></div>
+
+<style>
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    height: 100lvh;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--bg);
+    background-image: image-set(var(--page-bg-dark-1920-avif) type("image/avif"), var(--page-bg-dark-1920-webp) type("image/webp"));
+    background-size: cover;
+    background-position: center;
+  }
+  :global([data-theme="light"]) .page-bg {
+    background-image: image-set(var(--page-bg-light-1920-avif) type("image/avif"), var(--page-bg-light-1920-webp) type("image/webp"));
+  }
+  @media (max-width: 899px) {
+    .page-bg {
+      background-image: image-set(var(--page-bg-dark-960-avif) type("image/avif"), var(--page-bg-dark-960-webp) type("image/webp"));
+      background-position: center;
+    }
+    :global([data-theme="light"]) .page-bg {
+      background-image: image-set(var(--page-bg-light-960-avif) type("image/avif"), var(--page-bg-light-960-webp) type("image/webp"));
+    }
+  }
+  @media (max-width: 899px) and (orientation: portrait) {
+    .page-bg {
+      background-image: image-set(var(--page-bg-dark-mobile-941-avif) type("image/avif"), var(--page-bg-dark-mobile-941-webp) type("image/webp"));
+      background-position: center;
+    }
+    :global([data-theme="light"]) .page-bg {
+      background-image: image-set(var(--page-bg-light-mobile-941-avif) type("image/avif"), var(--page-bg-light-mobile-941-webp) type("image/webp"));
+    }
+  }
+  @media (max-width: 480px) and (orientation: portrait) {
+    .page-bg {
+      background-image: image-set(var(--page-bg-dark-mobile-720-avif) type("image/avif"), var(--page-bg-dark-mobile-720-webp) type("image/webp"));
+      background-position: center;
+    }
+    :global([data-theme="light"]) .page-bg {
+      background-image: image-set(var(--page-bg-light-mobile-720-avif) type("image/avif"), var(--page-bg-light-mobile-720-webp) type("image/webp"));
+    }
+  }
+</style>
