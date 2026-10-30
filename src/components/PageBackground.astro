@@ -1,0 +1,43 @@
+---
+import { getImage } from 'astro:assets';
+import bgDark from '../assets/bg/hero-dark.webp';
+import bgLight from '../assets/bg/hero-light.webp';
+
+const vars: string[] = [];
+
+for (const [theme, src] of Object.entries({ dark: bgDark, light: bgLight })) {
+  for (const width of [960, 1920]) {
+    for (const format of ['avif', 'webp']) {
+      const image = await getImage({ src, width, format });
+      vars.push(`--page-bg-${theme}-${width}-${format}: url('${image.src}')`);
+    }
+  }
+}
+---
+<div class="page-bg" aria-hidden="true" style={vars.join('; ')}></div>
+
+<style>
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    height: 100lvh;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--bg);
+    background-image: image-set(var(--page-bg-dark-1920-avif) type("image/avif"), var(--page-bg-dark-1920-webp) type("image/webp"));
+    background-size: cover;
+    background-position: center;
+  }
+  :global([data-theme="light"]) .page-bg {
+    background-image: image-set(var(--page-bg-light-1920-avif) type("image/avif"), var(--page-bg-light-1920-webp) type("image/webp"));
+  }
+  @media (max-width: 899px) {
+    .page-bg {
+      background-image: image-set(var(--page-bg-dark-960-avif) type("image/avif"), var(--page-bg-dark-960-webp) type("image/webp"));
+      background-position: 78% center;
+    }
+    :global([data-theme="light"]) .page-bg {
+      background-image: image-set(var(--page-bg-light-960-avif) type("image/avif"), var(--page-bg-light-960-webp) type("image/webp"));
+    }
+  }
+</style>

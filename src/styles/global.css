@@ -28,6 +28,11 @@
   --whatsapp-hover: #1EBE5A;
   --on-whatsapp: #FFFFFF;
   --mercadopago: #00B1EA;
+  --section-tint: rgba(255, 255, 255, 0.88);
+  --section-tint-alt: rgba(230, 236, 246, 0.80);
+  --hero-scrim: linear-gradient(90deg, rgba(230, 236, 246, 0.92) 0%, rgba(230, 236, 246, 0.68) 45%, rgba(230, 236, 246, 0.15) 75%);
+  --hero-scrim-mobile: linear-gradient(180deg, rgba(230, 236, 246, 0.92) 0%, rgba(230, 236, 246, 0.8) 55%, rgba(230, 236, 246, 0.55) 100%);
+  --receipt-shadow: rgba(4, 20, 51, 0.28);
 }
 
 :root[data-theme="dark"] {
@@ -47,6 +52,10 @@
   --footer-bg: #020B1F;
   --shadow-color: rgba(0, 0, 0, 0.55);
   --overlay: rgba(0, 0, 0, 0.65);
+  --section-tint: rgba(4, 20, 51, 0.90);
+  --section-tint-alt: rgba(7, 27, 66, 0.92);
+  --hero-scrim: linear-gradient(90deg, rgba(4, 20, 51, 0.88) 0%, rgba(4, 20, 51, 0.58) 45%, rgba(4, 20, 51, 0.1) 75%);
+  --hero-scrim-mobile: linear-gradient(180deg, rgba(4, 20, 51, 0.9) 0%, rgba(4, 20, 51, 0.78) 55%, rgba(4, 20, 51, 0.55) 100%);
 }
 
 :root:not([data-theme="light"]) {
@@ -66,6 +75,10 @@
   --footer-bg: #020B1F;
   --shadow-color: rgba(0, 0, 0, 0.55);
   --overlay: rgba(0, 0, 0, 0.65);
+  --section-tint: rgba(4, 20, 51, 0.90);
+  --section-tint-alt: rgba(7, 27, 66, 0.92);
+  --hero-scrim: linear-gradient(90deg, rgba(4, 20, 51, 0.88) 0%, rgba(4, 20, 51, 0.58) 45%, rgba(4, 20, 51, 0.1) 75%);
+  --hero-scrim-mobile: linear-gradient(180deg, rgba(4, 20, 51, 0.9) 0%, rgba(4, 20, 51, 0.78) 55%, rgba(4, 20, 51, 0.55) 100%);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,6 +94,20 @@ body {
   background: var(--bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Index page: the fixed photo shows through translucent section tints. */
+.has-page-bg { background: transparent; }
+body.has-page-bg .hero { background: var(--hero-scrim); }
+body.has-page-bg .features,
+body.has-page-bg .comparison,
+body.has-page-bg .faq,
+body.has-page-bg .contact { background: var(--section-tint); }
+body.has-page-bg .why,
+body.has-page-bg .pricing,
+body.has-page-bg .instagram { background: var(--section-tint-alt); }
+@media (max-width: 899px) {
+  body.has-page-bg .hero { background: var(--hero-scrim-mobile); }
 }
 
 h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; font-stretch: 125%; }
