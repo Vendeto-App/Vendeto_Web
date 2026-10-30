@@ -153,7 +153,8 @@ const links = [
         var y = window.scrollY;
         var drawer = document.getElementById('hamburger-drawer');
         var drawerOpen = drawer && drawer.classList.contains('open');
-        var focusInside = header.contains(document.activeElement);
+        var active = document.activeElement;
+        var focusInside = header.contains(active) && active.matches(':focus-visible');
         if (y < 80) {
           header.classList.remove('is-hidden');
           lastY = y;
