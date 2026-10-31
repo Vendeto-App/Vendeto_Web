@@ -1,0 +1,63 @@
+---
+import { STANDARD_TRIAL_DAYS, TRIAL_DAYS, TRIAL_PROMO } from '../config';
+interface Props {
+  animate?: boolean;
+}
+const { animate = false } = Astro.props;
+---
+{TRIAL_PROMO ? (
+  <span class:list={['trial-days', { 'trial-days--animate': animate }]}>
+    <span class="sr-only">{TRIAL_DAYS} días (antes {STANDARD_TRIAL_DAYS})</span><s class="was" aria-hidden="true">{STANDARD_TRIAL_DAYS} días</s> <strong class="now" aria-hidden="true">{TRIAL_DAYS} días</strong>
+  </span>
+) : (
+  <Fragment>{TRIAL_DAYS} días</Fragment>
+)}
+
+<style>
+  .trial-days { white-space: nowrap; }
+  .was {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    opacity: 0.65;
+    margin: 0 6px;
+  }
+  .was::after {
+    content: '';
+    position: absolute;
+    left: -3px;
+    right: -3px;
+    top: 52%;
+    height: 2.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transform: scaleX(1) rotate(-8deg);
+    transform-origin: left;
+  }
+  .now { display: inline-block; font-weight: 800; }
+  :global(.trial-banner) .now { font-size: 1.35em; }
+  :global(.hero-note) .now { color: var(--text); }
+
+  .trial-days--animate .was::after {
+    transition: transform 450ms cubic-bezier(.22, 1, .36, 1) 350ms;
+  }
+  .trial-days--animate .now {
+    transition:
+      opacity 500ms cubic-bezier(.34, 1.56, .64, 1) 800ms,
+      transform 500ms cubic-bezier(.34, 1.56, .64, 1) 800ms;
+  }
+  :global(html.motion:not(.reveal-all)) :global([data-anim]:not(.is-revealed)) .trial-days--animate .was::after {
+    transform: scaleX(0) rotate(-8deg);
+  }
+  :global(html.motion:not(.reveal-all)) :global([data-anim]:not(.is-revealed)) .trial-days--animate .now {
+    opacity: 0;
+    transform: translateY(8px) scale(.85);
+  }
+  :global(html.motion.motion-reduced:not(.reveal-all)) :global([data-anim]:not(.is-revealed)) .trial-days--animate .was::after {
+    transform: scaleX(1) rotate(-8deg);
+  }
+  :global(html.motion.motion-reduced:not(.reveal-all)) :global([data-anim]:not(.is-revealed)) .trial-days--animate .now {
+    opacity: 0;
+    transform: none;
+  }
+</style>

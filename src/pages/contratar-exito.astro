@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { TRIAL_DAYS } from '../config';
 const licenseKey = Astro.url.searchParams.get('license_key') ?? '';
 ---
 <BaseLayout title="Pago exitoso — Vendeto" description="Tu licencia quedó asociada a tu email. Activá Vendeto en tu computadora.">
@@ -10,8 +11,17 @@ const licenseKey = Astro.url.searchParams.get('license_key') ?? '';
     <section class="result-section">
       <div class="result-card success">
         <div class="icon">&#10003;</div>
-        <h1>Pago exitoso</h1>
-        <p>Tu licencia quedó asociada a tu email. Ahora activala en Vendeto.</p>
+        <h1 id="resultTitle">Pago exitoso</h1>
+        <p id="resultText">Tu licencia quedó asociada a tu email. Ahora activala en Vendeto.</p>
+        <script is:inline>
+          (function () {
+            if (new URLSearchParams(location.search).get('modo') !== 'suscripcion') return;
+            var title = document.getElementById('resultTitle');
+            var text = document.getElementById('resultText');
+            if (title) title.textContent = 'Débito automático activado';
+            if (text) text.textContent = 'Te vamos a cobrar cada mes con tu tarjeta. Lo podés cancelar cuando quieras desde tu cuenta de Mercado Pago, en Suscripciones.';
+          })();
+        </script>
         {licenseKey && (
           <div class="license-box">
             <span class="license-label">Tu clave de licencia</span>
@@ -22,7 +32,7 @@ const licenseKey = Astro.url.searchParams.get('license_key') ?? '';
           <h2>Instrucciones</h2>
           <ol>
             <li>Descargá e instalá Vendeto en tu computadora</li>
-            <li>Registrate con el mismo email con el que pagaste (te da una prueba de 30 días)</li>
+            <li>Registrate con el mismo email con el que pagaste (te da una prueba de {TRIAL_DAYS} días)</li>
             <li>Si ya tenés cuenta, ingresá a Configuración y tocá "Buscar licencia"</li>
           </ol>
         </div>

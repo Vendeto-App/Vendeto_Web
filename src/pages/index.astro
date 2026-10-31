@@ -10,8 +10,9 @@ import Faq from '../components/Faq.astro';
 import InstagramStrip from '../components/InstagramStrip.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import { TRIAL_DAYS } from '../config';
 ---
-<BaseLayout title="Vendeto — Punto de venta simple para tu comercio" description="Sistema de punto de venta simple para kioscos, almacenes y comercios: ventas, stock, caja y fiado en un solo lugar, sin manual ni curso. Probalo gratis 30 días." pageBackground>
+<BaseLayout title="Vendeto — Punto de venta simple para tu comercio" description={`Sistema de punto de venta simple para kioscos, almacenes y comercios: ventas, stock, caja y fiado en un solo lugar, sin manual ni curso. Probalo gratis ${TRIAL_DAYS} días.`} pageBackground>
   <Header />
   <main>
     <Hero />

@@ -1,6 +1,8 @@
 ---
 import CheckoutModal from './CheckoutModal.astro';
 import MercadoPagoIcon from './MercadoPagoIcon.astro';
+import TrialDays from './TrialDays.astro';
+import { TRIAL_PROMO } from '../config';
 const plans = [
   {
     name: 'Gratuito',
@@ -64,8 +66,8 @@ const plans = [
     </div>
 
     <div class="trial-banner" data-anim style="--i:0">
-      <span class="trial-badge">Prueba gratuita</span>
-      <p class="trial-text">Probá el plan <strong>Avanzado</strong> gratis durante 30 días.</p>
+      <span class="trial-badge">{TRIAL_PROMO ? TRIAL_PROMO.label : 'Prueba gratuita'}</span>
+      <p class="trial-text">Probá el plan <strong>Avanzado</strong> gratis durante <TrialDays animate />.</p>
     </div>
 
     <div class="plans">
@@ -78,6 +80,7 @@ const plans = [
             <span class="amount">{p.price}</span>
             <span class="per">{p.per}</span>
           </div>
+          {p.key !== 'gratuito' && <p class="plan-billing-note">Débito automático o pago mensual</p>}
           <div class="plan-divider"></div>
           {p.includes && (
             <div class="plan-includes">
@@ -104,6 +107,7 @@ const plans = [
               type="button"
               class:list={['btn', p.featured ? 'btn-primary' : 'btn-ghost', 'plan-btn']}
               data-plan={p.key}
+              data-price={p.price}
             >
               {p.cta}
             </button>
@@ -120,7 +124,7 @@ const plans = [
     </div>
   </div>
 
-  <CheckoutModal />
+  <CheckoutModal billingChoice />
 </section>
 
 <style>
@@ -216,6 +220,7 @@ const plans = [
   :global([data-theme="dark"]) .plan.featured .amount::before { bottom: -0.08em; height: 0.08em; }
   @media (prefers-color-scheme: dark) { :global(:root:not([data-theme="light"])) .plan.featured .amount::before { bottom: -0.08em; height: 0.08em; } }
   .per { color: var(--text-2); font-size: 0.9rem; }
+  .plan-billing-note { color: var(--text-3); font-size: 0.85rem; }
   .plan-divider { height: 1px; background: var(--border); margin: 20px 0; }
   .plan-includes {
     display: flex;
