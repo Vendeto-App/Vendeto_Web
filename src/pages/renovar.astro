@@ -55,6 +55,9 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
             Tu plan se renueva por un mes más. Elegí el plan y pagá con Mercado Pago <MercadoPagoIcon />:
             tu licencia se extiende automáticamente.
           </p>
+          <p class="renew-subscription">
+            ¿Querés olvidarte de renovar? <a href="/#precios">Activá el débito automático</a>.
+          </p>
         </div>
 
         <div class="plans">
@@ -120,6 +123,8 @@ const highlighted = plans.find((p) => p.key === planParam)?.key ?? 'maxima';
 <style>
   .renew { background: var(--bg-alt); min-height: 70vh; }
   .renew .center .section-sub { margin: 0 auto; }
+  .renew-subscription { margin-top: 10px; font-size: 0.95rem; color: var(--text-2); }
+  .renew-subscription a { color: var(--link); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
   .renew-note {
     margin-top: 28px;
     text-align: center;

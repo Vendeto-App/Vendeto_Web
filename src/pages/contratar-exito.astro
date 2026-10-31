@@ -11,8 +11,17 @@ const licenseKey = Astro.url.searchParams.get('license_key') ?? '';
     <section class="result-section">
       <div class="result-card success">
         <div class="icon">&#10003;</div>
-        <h1>Pago exitoso</h1>
-        <p>Tu licencia quedó asociada a tu email. Ahora activala en Vendeto.</p>
+        <h1 id="resultTitle">Pago exitoso</h1>
+        <p id="resultText">Tu licencia quedó asociada a tu email. Ahora activala en Vendeto.</p>
+        <script is:inline>
+          (function () {
+            if (new URLSearchParams(location.search).get('modo') !== 'suscripcion') return;
+            var title = document.getElementById('resultTitle');
+            var text = document.getElementById('resultText');
+            if (title) title.textContent = 'Débito automático activado';
+            if (text) text.textContent = 'Te vamos a cobrar cada mes con tu tarjeta. Lo podés cancelar cuando quieras desde tu cuenta de Mercado Pago, en Suscripciones.';
+          })();
+        </script>
         {licenseKey && (
           <div class="license-box">
             <span class="license-label">Tu clave de licencia</span>
